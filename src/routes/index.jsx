@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react'
 import LoaderScreen from '../components/loader'
 const Login = lazy(() => import('./auth/login'))
 const Register = lazy(() => import('./auth/register'))
+const Dashboard = lazy(() => import('./dashboard/index'))
 
 const useRoutes = () => [
   {
@@ -16,6 +17,10 @@ const useRoutes = () => [
   {
     path: '/register',
     component: <Register />,
+  },
+  {
+    path: '/dashboard',
+    component: <Dashboard />,
   },
 ]
 
