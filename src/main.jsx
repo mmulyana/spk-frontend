@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import '@mantine/core/styles.css'
 import { MantineProvider, createTheme } from '@mantine/core'
 import Routers from './routes'
+import './global.css'
+import '@mantine/core/styles.css'
 
 const theme = createTheme({})
 
