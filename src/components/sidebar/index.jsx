@@ -1,47 +1,37 @@
-import {
-  TextInput,
-  Code,
-  UnstyledButton,
-  Badge,
-  Text,
-  Group,
-  ActionIcon,
-  Tooltip,
-  rem,
-} from '@mantine/core'
-import {
-  IconBulb,
-  IconUser,
-  IconCheckbox,
-  IconSearch,
-  IconPlus,
-} from '@tabler/icons-react'
+import { Text, Group } from '@mantine/core'
+
 import classes from './NavbarSearch.module.css'
 import { UserButton } from '../UserButtton'
-import { Link } from 'react-router-dom'
+import { Link, matchPath } from 'react-router-dom'
+import { PATH } from '../../utils/constant/_path'
 
-const links = [
-  { icon: IconBulb, label: 'Activity', notifications: 3 },
-  { icon: IconCheckbox, label: 'Tasks', notifications: 4 },
-  { icon: IconUser, label: 'Contacts' },
+const MainMenu = [
+  { label: 'Dashboard', path: PATH.DASHBOARD },
+  { label: 'Employee', path: PATH.DASHBOARD_EMPLOYEE },
+  { label: 'Criteria', path: PATH.DASHBOARD_CRITERIA },
 ]
 
-const collections = [
-  { label: 'Menu 1' },
-  { label: 'Menu 2' },
-  { label: 'Menu 3' },
+const SecondaryMenu = [
+  { label: 'Admin', path: PATH.DASHBOARD_ADMIN },
+  { label: 'Account', path: PATH.DASHBOARD_ADMIN },
 ]
 
 export default function Sidebar() {
-  const collectionLinks = collections.map((collection) => (
-    <Link
-      to='/dashboard'
-      key={collection.label}
-      className='hover:bg-white border-b border-transparent hover:border-gray-200 text-sm p-2.5 rounded-lg text-gray-500'
-    >
-      {collection.label}
-    </Link>
-  ))
+  const isActive = (path) => !!matchPath({ path }, window.location.pathname)
+
+  const renderMenu = (menus) =>
+    menus.map((menu) => (
+      <Link
+        to={menu.path}
+        key={menu.label}
+        className={[
+          'hover:bg-white border-b-2 border-transparent hover:border-gray-200 text-sm py-2.5 px-3 rounded-lg text-gray-500',
+          isActive(menu.path) ? 'bg-white border-gray-200' : '',
+        ].join(' ')}
+      >
+        {menu.label}
+      </Link>
+    ))
 
   return (
     <nav className={`${classes.navbar} !p-4`}>
@@ -55,7 +45,16 @@ export default function Sidebar() {
             Menus
           </Text>
         </Group>
-        <div className='flex flex-col gap-2'>{collectionLinks}</div>
+        <div className='flex flex-col gap-2'>{renderMenu(MainMenu)}</div>
+      </div>
+
+      <div className='mt-4'>
+        <Group justify='space-between' className='mb-2'>
+          <Text size='xs' fw={500} c='dimmed'>
+            Settings
+          </Text>
+        </Group>
+        <div className='flex flex-col gap-2'>{renderMenu(SecondaryMenu)}</div>
       </div>
     </nav>
   )
