@@ -12,8 +12,8 @@ const MainMenu = [
 ]
 
 const SecondaryMenu = [
-  { label: 'Admin', path: PATH.DASHBOARD_ADMIN },
-  { label: 'Account', path: PATH.DASHBOARD_ADMIN },
+  { label: 'Settings', path: PATH.DASHBOARD_ADMIN_SETTINGS },
+  { label: 'Account', path: PATH.DASHBOARD_ADMIN_ACCOUNT },
 ]
 
 export default function Sidebar() {
@@ -25,8 +25,10 @@ export default function Sidebar() {
         to={menu.path}
         key={menu.label}
         className={[
-          'hover:bg-white border-b-2 border-transparent hover:border-gray-200 text-sm py-2.5 px-3 rounded-lg text-gray-500',
-          isActive(menu.path) ? 'bg-white border-gray-200' : '',
+          'hover:bg-white border-b-2 border-transparent hover:border-gray-200 text-sm py-2.5 px-3 rounded-lg',
+          isActive(menu.path)
+            ? 'bg-white border-gray-200 text-gray-600 font-medium'
+            : 'text-gray-400',
         ].join(' ')}
       >
         {menu.label}
