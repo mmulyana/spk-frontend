@@ -1,9 +1,9 @@
-import Sidebar from "../../../components/sidebar";
+import Sidebar from '../../../components/sidebar'
 
 export default function DashboardLayout({ children }) {
   return (
     <>
-      <Sidebar/>
+      <Sidebar />
       <div className='ml-[280px] p-4'>{children}</div>
     </>
   )
