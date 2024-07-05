@@ -43,3 +43,16 @@ export const employees = [
     position: 'pegawai',
   },
 ]
+
+export const accounts = [
+  {
+    name: 'admin',
+    email: 'admin@mail.com',
+    role: 'admin',
+  },
+  {
+    name: 'bagus',
+    email: 'bagus@mail.com',
+    role: 'manager',
+  },
+]
