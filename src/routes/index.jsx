@@ -37,7 +37,7 @@ const useRoutes = () => [
     component: <Criteria />,
   },
   {
-    path: PATH.DASHBOARD_ADMIN_SETTINGS,
+    path: PATH.DASHBOARD_SETTINGS,
     component: <Setting />,
   },
   {
