@@ -1,16 +1,14 @@
-import { UnstyledButton, Group, Avatar, Text, rem } from '@mantine/core'
-import { IconChevronRight } from '@tabler/icons-react'
+import { UnstyledButton, Group, Avatar, Text, rem, Flex } from '@mantine/core'
 
 export function UserButton() {
   return (
-    <UnstyledButton className='block w-full p-0 mb-4'>
-      <Group className='bg-white p-2 py-2.5 rounded border border-gray-200/80 shadow-sm'>
+    <div>
+      <Flex gap={8}>
         <Avatar
           src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png'
           radius='xl'
         />
-
-        <div style={{ flex: 1 }}>
+        <div>
           <Text size='sm' fw={500}>
             Example
           </Text>
@@ -19,7 +17,7 @@ export function UserButton() {
             example@mail.com
           </Text>
         </div>
-      </Group>
-    </UnstyledButton>
+      </Flex>
+    </div>
   )
 }
