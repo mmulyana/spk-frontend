@@ -26,7 +26,7 @@ export default function Navbar() {
             </Button>
           </Link>
 
-          <Link to={PATH.DASHBOARD_ADMIN_SETTINGS}>
+          <Link to={PATH.DASHBOARD_SETTINGS}>
             <Button
               variant='transparent'
               className='!h-8 !w-8 hover:!bg-gray-100'
