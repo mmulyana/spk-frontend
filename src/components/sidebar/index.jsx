@@ -7,13 +7,14 @@ import { PATH } from '../../utils/constant/_path'
 
 const MainMenu = [
   { label: 'Dashboard', path: PATH.DASHBOARD },
-  { label: 'Employee', path: PATH.DASHBOARD_EMPLOYEE },
-  { label: 'Criteria', path: PATH.DASHBOARD_CRITERIA },
+  { label: 'Pegawai', path: PATH.DASHBOARD_EMPLOYEE },
+  { label: 'Kriteria', path: PATH.DASHBOARD_CRITERIA },
+  { label: 'Hasil', path: PATH.DASHBOARD_RESULT },
 ]
 
 const SecondaryMenu = [
-  { label: 'Settings', path: PATH.DASHBOARD_ADMIN_SETTINGS },
-  { label: 'Account', path: PATH.DASHBOARD_ADMIN_ACCOUNT },
+  { label: 'Pengaturan', path: PATH.DASHBOARD_ADMIN_SETTINGS },
+  { label: 'Akun', path: PATH.DASHBOARD_ADMIN_ACCOUNT },
 ]
 
 export default function Sidebar() {
@@ -25,10 +26,10 @@ export default function Sidebar() {
         to={menu.path}
         key={menu.label}
         className={[
-          'hover:bg-white border-b-2 border-transparent hover:border-gray-200 text-sm py-2.5 px-3 rounded-lg',
+          'hover:bg-white border-b-2 hover:border-gray-200 text-sm py-2.5 px-3 rounded-lg',
           isActive(menu.path)
             ? 'bg-white border-gray-200 text-gray-600 font-medium'
-            : 'text-gray-400',
+            : 'text-gray-400 border-transparent hover:text-gray-600',
         ].join(' ')}
       >
         {menu.label}
@@ -53,7 +54,7 @@ export default function Sidebar() {
       <div className='mt-4'>
         <Group justify='space-between' className='mb-2'>
           <Text size='xs' fw={500} c='dimmed'>
-            Settings
+            Pengaturan
           </Text>
         </Group>
         <div className='flex flex-col gap-2'>{renderMenu(SecondaryMenu)}</div>
