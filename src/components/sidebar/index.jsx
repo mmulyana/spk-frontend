@@ -3,12 +3,13 @@ import { Text, Group, Button, Flex } from '@mantine/core'
 import { Link, matchPath } from 'react-router-dom'
 import { PATH } from '../../utils/constant/_path'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
+import Logo from '../logo'
 
 const MainMenu = [
   { label: 'Dashboard', path: PATH.DASHBOARD },
   { label: 'Kriteria', path: PATH.DASHBOARD_CRITERIA },
   { label: 'Pegawai', path: PATH.DASHBOARD_EMPLOYEE },
-  { label: 'Hasil', path: PATH.DASHBOARD_RESULT },
+  { label: 'Peringkat', path: PATH.DASHBOARD_RESULT },
 ]
 
 export default function Sidebar() {
@@ -20,12 +21,15 @@ export default function Sidebar() {
         to={menu.path}
         key={menu.label}
         className={[
-          'hover:bg-white text-sm py-2.5 px-3 rounded-lg',
+          'hover:bg-white text-sm py-2.5 px-3 rounded-lg relative',
           isActive(menu.path)
-            ? 'bg-[#F6F7F9] text-gray-600 font-medium hover:bg-[#EBEDF1]'
-            : 'text-gray-400 hover:text-gray-600 hover:bg-[#F6F7F9]',
+            ? 'bg-[#F6F7F9] text-gray-600 font-medium hover:bg-gray-100'
+            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50',
         ].join(' ')}
       >
+        {isActive(menu.path) && (
+          <div className='h-6 w-1 rounded-r-xl bg-blue-600 absolute top-1/2 -translate-y-1/2 -left-4'></div>
+        )}
         {menu.label}
       </Link>
     ))
@@ -33,6 +37,12 @@ export default function Sidebar() {
   return (
     <nav className='px-4 border-r border-gray-600/10 w-[280px] fixed h-screen bg-white'>
       <div className='w-full h-14 px-4 relative'>
+        <Flex align='center' h={56} gap={8}>
+          <Logo />
+          <p className='text-blue-700 text-lg capitalize m-0'>
+            SPK Pegawai Terbaik
+          </p>
+        </Flex>
         <div className='w-full h-[1.5px] bg-gray-100 absolute bottom-0 left-1/2 -translate-x-1/2'></div>
       </div>
       <div className='mt-4'>
@@ -48,8 +58,8 @@ export default function Sidebar() {
         <Button
           w='100%'
           unstyled
-          className='border border-gray-600/20 text-gray-500 rounded-md text-sm'
-          py={6}
+          className='text-gray-500 rounded-md text-sm hover:bg-[#F6F7F9] hover:text-gray-600'
+          py={8}
         >
           <Flex align='center' justify='center' gap={4}>
             <ArrowRightStartOnRectangleIcon className='h-5 w-5 text-gray-400' />
