@@ -3,11 +3,13 @@ export const PATH = {
   FORGOT: '/forgot',
   REGISTER: '/register',
   
-  DASHBOARD_ADMIN_ACCOUNT: '/dashboard/admin/account',
   DASHBOARD: '/dashboard',
   DASHBOARD_EMPLOYEE: '/dashboard/employee',
   DASHBOARD_CRITERIA: '/dashboard/criteria',
+  DASHBOARD_RESULT: '/dashboard/result',
+  
   DASHBOARD_ADMIN_SETTINGS: '/dashboard/admin',
+  DASHBOARD_ADMIN_ACCOUNT: '/dashboard/admin/account',
   
   NOT_FOUND: '*',
 }
