@@ -90,7 +90,7 @@ export default function Page() {
   return (
     <>
       <DashboardLayout>
-        <div className='bg-white p-4 mt-4 rounded-lg'>
+        <div className='bg-white p-4 mt-4 rounded-lg border border-gray-600/10'>
           <div className='flex items-center justify-between mb-4'>
             <p className='text-gray-700 font-medium'>Kriteria</p>
             <Button
