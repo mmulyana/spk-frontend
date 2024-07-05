@@ -92,7 +92,7 @@ export default function Page() {
     <>
       <DashboardLayout>
         <div className='flex items-center justify-between mb-4 mt-2.5'>
-          <p className='text-gray-700 font-medium'>Criteria</p>
+          <p className='text-gray-700 font-medium'>Kriteria</p>
           <Button
             onClick={() => openAdd()}
             variant='filled'
@@ -102,7 +102,7 @@ export default function Page() {
           >
             <Flex align='center' gap={2}>
               <PlusIcon className='text-white w-4 h-4' />
-              <span className='text-sm font-normal'>Add Criteria</span>
+              <span className='text-sm font-normal'>Tambah kriteria</span>
             </Flex>
           </Button>
         </div>
@@ -110,10 +110,10 @@ export default function Page() {
           <Table.Thead>
             <Table.Tr className='!border-none'>
               <Table.Th className='rounded-l-md bg-[#F2F4F7]'>
-                <span className='text-sm font-medium'>Name</span>
+                <span className='text-sm font-medium'>Nama</span>
               </Table.Th>
               <Table.Th className='bg-[#F2F4F7]'>
-                <span className='text-sm font-medium'>Value</span>
+                <span className='text-sm font-medium'>Nilai</span>
               </Table.Th>
               <Table.Th className='w-[120px] bg-[#F2F4F7] rounded-r-md'></Table.Th>
             </Table.Tr>
