@@ -9,10 +9,15 @@ const Employee = lazy(() => import('./dashboard/employee/index'))
 const Criteria = lazy(() => import('./dashboard/criteria/index'))
 const Setting = lazy(() => import('./dashboard/settings/index'))
 const Account = lazy(() => import('./dashboard/settings/account/index'))
+const NotFound = lazy(() => import('./not-found/index'))
 
 const useRoutes = () => [
   {
-    path: PATH.LOGIN || '/',
+    path: '/',
+    component: <Login />,
+  },
+  {
+    path: PATH.LOGIN,
     component: <Login />,
   },
   {
@@ -38,6 +43,10 @@ const useRoutes = () => [
   {
     path: PATH.DASHBOARD_ADMIN_ACCOUNT,
     component: <Account />,
+  },
+  {
+    path: PATH.NOT_FOUND,
+    component: <NotFound />,
   },
 ]
 
