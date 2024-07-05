@@ -60,7 +60,7 @@ export default function Page() {
   }
 
   const rows = data.map((d, index) => (
-    <Table.Tr key={index} className='hover:bg-gray-50'>
+    <Table.Tr key={index} className='hover:bg-gray-50/50'>
       <Table.Td>{d.id}</Table.Td>
       <Table.Td>{d.name}</Table.Td>
       <Table.Td>{d.position}</Table.Td>
@@ -92,42 +92,44 @@ export default function Page() {
   return (
     <>
       <DashboardLayout>
-        <div className='flex items-center justify-between mb-4 mt-2.5'>
-          <p className='text-gray-700 font-medium'>Pegawai</p>
-          <Button
-            onClick={() => openAdd()}
-            variant='filled'
-            py={4}
-            pl={6}
-            pr={12}
-          >
-            <Flex align='center' gap={2}>
-              <PlusIcon className='text-white w-4 h-4' />
-              <span className='text-sm font-normal'>Tambah Pegawai</span>
-            </Flex>
-          </Button>
-        </div>
-        <Table className='rounded-md'>
-          <Table.Thead>
-            <Table.Tr className='!border-none'>
-              <Table.Th className='rounded-l-md bg-[#F2F4F7]'>
-                <span className='text-sm font-medium'>Id</span>
-              </Table.Th>
-              <Table.Th className='bg-[#F2F4F7]'>
-                <span className='text-sm font-medium'>Nama</span>
-              </Table.Th>
-              <Table.Th className='bg-[#F2F4F7]'>
-                <span className='text-sm font-medium'>Jabatan</span>
-              </Table.Th>
-              <Table.Th className='w-[120px] bg-[#F2F4F7] rounded-r-md'></Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
+        <div className='bg-white p-4 mt-4 rounded-lg border border-gray-600/10'>
+          <div className='flex items-center justify-between mb-4'>
+            <p className='text-gray-700 font-medium'>Pegawai</p>
+            <Button
+              onClick={() => openAdd()}
+              variant='filled'
+              py={4}
+              pl={6}
+              pr={12}
+            >
+              <Flex align='center' gap={2}>
+                <PlusIcon className='text-white w-4 h-4' />
+                <span className='text-sm font-normal'>Tambah Pegawai</span>
+              </Flex>
+            </Button>
+          </div>
+          <Table className='rounded-md'>
+            <Table.Thead>
+              <Table.Tr className='!border-none'>
+                <Table.Th className='rounded-l-md bg-[#F6F7F9]'>
+                  <span className='text-sm font-medium'>Id</span>
+                </Table.Th>
+                <Table.Th className='bg-[#F6F7F9]'>
+                  <span className='text-sm font-medium'>Nama</span>
+                </Table.Th>
+                <Table.Th className='bg-[#F6F7F9]'>
+                  <span className='text-sm font-medium'>Jabatan</span>
+                </Table.Th>
+                <Table.Th className='w-[120px] bg-[#F6F7F9] rounded-r-md'></Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
 
-        <Flex justify='end' mt={16}>
-          <Pagination total={10} size='sm' radius='xs' value={1} />
-        </Flex>
+          <Flex justify='end' mt={16}>
+            <Pagination total={10} size='sm' radius='xs' value={1} />
+          </Flex>
+        </div>
       </DashboardLayout>
 
       <Modal opened={openedEdit} onClose={handleClose} title='Edit Pegawai'>
