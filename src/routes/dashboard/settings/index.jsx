@@ -1,9 +1,7 @@
+import { useTitle } from '../../../utils/useTitle'
 import DashboardLayout from '../_component/layout'
 
 export default function Page() {
-  return (
-    <DashboardLayout>
-      <p>Settings</p>
-    </DashboardLayout>
-  )
+  useTitle('Pengaturan')
+  return <DashboardLayout></DashboardLayout>
 }
