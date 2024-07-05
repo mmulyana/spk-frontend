@@ -3,3 +3,9 @@
 }
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply !bg-[#F9FAFB];
+  }
+}
