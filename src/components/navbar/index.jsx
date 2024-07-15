@@ -26,17 +26,6 @@ export default function Navbar() {
             </Button>
           </Link>
 
-          <Link to={PATH.DASHBOARD_SETTINGS}>
-            <Button
-              variant='transparent'
-              className='!h-8 !w-8 hover:!bg-gray-100'
-              px={0}
-              py={0}
-              radius='xl'
-            >
-              <Cog6ToothIcon className='h-5 w-5 text-gray-400' />
-            </Button>
-          </Link>
           <Flex gap={10} align='center' h='56px'>
             <Divider orientation='vertical' h='40px' className='!self-center' />
             <UserButton />
