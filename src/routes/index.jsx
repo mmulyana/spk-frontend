@@ -7,9 +7,9 @@ const Register = lazy(() => import('./auth/register'))
 const Dashboard = lazy(() => import('./dashboard/index'))
 const Employee = lazy(() => import('./dashboard/employee/index'))
 const Criteria = lazy(() => import('./dashboard/criteria/index'))
-const Setting = lazy(() => import('./dashboard/settings/index'))
 const Account = lazy(() => import('./dashboard/settings/account/index'))
 const NotFound = lazy(() => import('./not-found/index'))
+const Ranking = lazy(() => import('./dashboard/ranking'))
 
 const useRoutes = () => [
   {
@@ -37,16 +37,16 @@ const useRoutes = () => [
     component: <Criteria />,
   },
   {
-    path: PATH.DASHBOARD_SETTINGS,
-    component: <Setting />,
-  },
-  {
     path: PATH.DASHBOARD_ADMIN_ACCOUNT,
     component: <Account />,
   },
   {
     path: PATH.NOT_FOUND,
     component: <NotFound />,
+  },
+  {
+    path: PATH.DASHBOARD_RESULT,
+    component: <Ranking />,
   },
 ]
 
