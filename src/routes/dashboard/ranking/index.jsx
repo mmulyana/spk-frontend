@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { useTitle } from '../../../utils/useTitle'
 import { employees } from '../../../data/table'
 import DashboardLayout from '../_component/layout'
-import { IconSearch } from '@tabler/icons-react'
+import { IconFilter, IconSearch, IconSortAscending } from '@tabler/icons-react'
 
 export default function Page() {
   useTitle('Peringkat')
@@ -27,8 +27,32 @@ export default function Page() {
             <p className='text-gray-700 font-medium'>Peringkat</p>
           </div>
           <Flex justify='space-between' align='center' mb={16}>
-            <Input placeholder='Cari' leftSection={<IconSearch className='w-4'/>} />
-            <div></div>
+            <Input
+              placeholder='Cari'
+              leftSection={<IconSearch className='w-4' />}
+            />
+            <Flex gap={8} align='center'>
+              <Button
+                pl={5}
+                size='compact-sm'
+                className='!bg-transparent !text-gray-900 hover:!bg-gray-100'
+              >
+                <Flex align='center' gap={4}>
+                  <IconFilter className='w-5 text-gray-400' />
+                  <span>Filter</span>
+                </Flex>
+              </Button>
+              <Button
+                pl={5}
+                size='compact-sm'
+                className='!bg-transparent !text-gray-900 hover:!bg-gray-100'
+              >
+                <Flex align='center' gap={4}>
+                  <IconSortAscending className='w-5 text-gray-400' />
+                  <span>Sort</span>
+                </Flex>
+              </Button>
+            </Flex>
           </Flex>
           <Table className='rounded-md'>
             <Table.Thead>
