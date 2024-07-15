@@ -15,6 +15,7 @@ import { useTitle } from '../../../utils/useTitle'
 
 export default function Page() {
   const [id, setId] = useState(null)
+  const [modalState, setModalState] = useState('add')
   useTitle('Pegawai')
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
@@ -48,6 +49,66 @@ export default function Page() {
     ],
     []
   )
+
+  const modalOpenConfig = {
+    add: {
+      component: (
+        <form>
+          <TextInput label='Nama' />
+          <Select
+            mt={8}
+            label='Jabatan'
+            placeholder='select'
+            data={['Pegawai', 'Intern', 'Supervisor']}
+          />
+          <Button
+            mt={20}
+            display='block'
+            size='sm'
+            ml='auto'
+            onClick={() => setModalState('afterAdd')}
+          >
+            Tambah
+          </Button>
+        </form>
+      ),
+      title: 'Tambah Pegawai',
+    },
+    afterAdd: {
+      component: (
+        <div>
+          <p className='text-lg text-center'>Buat Penilaian Pegawai Baru</p>
+          <div className='flex gap-2 items-center mt-2 justify-center'>
+            <Button
+              display='block'
+              size='sm'
+              variant='default'
+              onClick={() => setModalState('add')}
+            >
+              Tambah Pegawai Baru
+            </Button>
+            <Button
+              display='block'
+              size='sm'
+              onClick={() => setModalState('mark')}
+            >
+              Buat Penilaian
+            </Button>
+          </div>
+        </div>
+      ),
+      title: 'Pegawai Berhasil Ditambah',
+    },
+    mark: {
+      component: (
+        <div>
+          <p>Penilaian Pegawai</p>
+          <Button onClick={closeAdd}>Selesai</Button>
+        </div>
+      ),
+      title: 'Penilaian Pegawai',
+    },
+  }
 
   const handleClose = () => {
     if (id !== null) setId(null)
@@ -158,19 +219,12 @@ export default function Page() {
         </div>
       </Modal>
 
-      <Modal opened={openedAdd} onClose={handleClose} title='Tambah Pegawai'>
-        <form>
-          <TextInput label='Nama' />
-          <Select
-            mt={8}
-            label='Jabatan'
-            placeholder='select'
-            data={['Pegawai', 'Intern', 'Supervisor']}
-          />
-          <Button mt={20} display='block' size='sm' ml='auto'>
-            Tambah
-          </Button>
-        </form>
+      <Modal
+        opened={openedAdd}
+        onClose={handleClose}
+        title={modalOpenConfig[modalState].title}
+      >
+        {modalOpenConfig[modalState].component}
       </Modal>
     </>
   )
