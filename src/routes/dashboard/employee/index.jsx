@@ -13,11 +13,13 @@ import {
 import { useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTitle } from '../../../utils/useTitle'
+import { ApplySpkModal, CreateModal, SuccessCreateModal } from './modal'
 
 export default function Page() {
+  useTitle('Pegawai')
+
   const [id, setId] = useState(null)
   const [modalState, setModalState] = useState('add')
-  useTitle('Pegawai')
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false)
@@ -58,106 +60,21 @@ export default function Page() {
 
   const modalOpenConfig = {
     add: {
-      component: (
-        <form className='w-full'>
-          <Flex gap={16} w='100%'>
-            <TextInput w='50%' label='Nama' />
-            <TextInput w='50%' label='NIP' />
-          </Flex>
-          <Flex gap={16} w='100%' mt={16}>
-            <TextInput w='50%' label='Tempat Lahir' />
-            <TextInput w='50%' label='Tanggal Lahir' type='date' />
-          </Flex>
-          <Flex gap={16} w='100%' mt={16}>
-            <Select
-              w='50%'
-              label='Jenis Kelamin'
-              placeholder='Pilih Jenis Kelamin'
-              data={['Laki-laki', 'perempuan']}
-            />
-            <TextInput w='50%' label='Agama' />
-          </Flex>
-          <Textarea mt={16} label='Alamat' />
-          <Flex gap={16} w='100%' mt={16}>
-            <Select
-              w='50%'
-              label='Pendidikan Terakhir'
-              placeholder='Pilih Pendidikan Terakhir'
-              data={['SMP', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3']}
-            />
-            <Select
-              w='50%'
-              label='Status Pegawai'
-              placeholder='Pilih Status Pegawai'
-              data={['Tetap', 'Kontrak']}
-            />
-          </Flex>
-          <Flex gap={16} w='100%' mt={16}>
-            <Select
-              w='50%'
-              label='Departemen'
-              placeholder='Pilih Departemen'
-              data={['Produksi', 'Keuangan', 'Marketing', 'Sales']}
-            />
-            <Select
-              w='50%'
-              label='Jabatan'
-              placeholder='Pilih Jabatan'
-              data={['Intern', 'Pegawai', 'Supervisor']}
-            />
-          </Flex>
-          <Button
-            mt={20}
-            display='block'
-            size='sm'
-            ml='auto'
-            onClick={() => setModalState('afterAdd')}
-          >
-            Tambah
-          </Button>
-        </form>
-      ),
+      component: <CreateModal setModalState={setModalState} />,
       title: 'Tambah Pegawai',
       size: 'xl',
     },
     afterAdd: {
-      component: (
-        <div>
-          <p className='text-lg text-center'>Buat Penilaian Pegawai Baru</p>
-          <Flex gap={16} w='100%' mt={24}>
-            <Button
-              w='50%'
-              size='sm'
-              variant='default'
-              onClick={() => setModalState('add')}
-            >
-              Tambah Pegawai Baru
-            </Button>
-            <Button w='50%' size='sm' onClick={() => setModalState('mark')}>
-              Buat Penilaian
-            </Button>
-          </Flex>
-        </div>
-      ),
+      component: <SuccessCreateModal setModalState={setModalState} />,
       title: '',
-      size: 'sm',
+      size: 'lg',
     },
     mark: {
       component: (
-        <div>
-          <p>Penilaian Pegawai</p>
-          <Button
-            onClick={() => {
-              closeAdd()
-              setModalState('add')
-            }}
-          >
-            Selesai
-          </Button>
-        </div>
+        <ApplySpkModal closeAdd={closeAdd} setModalState={setModalState} />
       ),
       title: 'Penilaian Pegawai',
-      size: 'xl',
+      size: 'lg',
     },
   }
 
@@ -244,7 +161,12 @@ export default function Page() {
         </div>
       </DashboardLayout>
 
-      <Modal opened={openedEdit} onClose={handleClose} title='Edit Pegawai' size='xl'>
+      <Modal
+        opened={openedEdit}
+        onClose={handleClose}
+        title='Edit Pegawai'
+        size='xl'
+      >
         <form className='w-full'>
           <Flex gap={16} w='100%'>
             <TextInput w='50%' label='Nama' />
