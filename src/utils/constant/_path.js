@@ -8,8 +8,8 @@ export const PATH = {
   DASHBOARD_CRITERIA: '/dashboard/criteria',
   DASHBOARD_RESULT: '/dashboard/result',
   
-  DASHBOARD_SETTINGS: '/dashboard/settings',
-  DASHBOARD_ADMIN_ACCOUNT: '/dashboard/admin/account',
+  DASHBOARD_ADMIN: '/dashboard-admin',
+  DASHBOARD_ADMIN_ACCOUNT: '/dashboard-admin/account',
 
   NOT_FOUND: '*',
 }
