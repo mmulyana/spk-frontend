@@ -11,7 +11,6 @@ const Criteria = lazy(() => import('./dashboard/criteria/index'))
 const NotFound = lazy(() => import('./not-found/index'))
 const Ranking = lazy(() => import('./dashboard/ranking'))
 
-const Admin_Dashboard = lazy(() => import('./dashboard-admin/index'))
 const Admin_Account = lazy(() => import('./dashboard-admin/account/index'))
 
 const useRoutes = () => [
@@ -46,10 +45,6 @@ const useRoutes = () => [
   {
     path: PATH.DASHBOARD_RESULT,
     component: <Ranking />,
-  },
-  {
-    path: PATH.DASHBOARD_ADMIN,
-    component: <Admin_Dashboard />,
   },
   {
     path: PATH.DASHBOARD_ADMIN_ACCOUNT,
