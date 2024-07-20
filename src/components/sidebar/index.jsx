@@ -5,6 +5,11 @@ import { PATH } from '../../utils/constant/_path'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
 import Logo from '../logo'
 
+const AdminMenus = [
+  { label: 'Dashboard', path: PATH.DASHBOARD_ADMIN },
+  { label: 'Account', path: PATH.DASHBOARD_ADMIN_ACCOUNT },
+]
+
 const MainMenu = [
   { label: 'Dashboard', path: PATH.DASHBOARD },
   { label: 'Kriteria', path: PATH.DASHBOARD_CRITERIA },
@@ -44,6 +49,14 @@ export default function Sidebar() {
           </p>
         </Flex>
         <div className='w-full h-[1.5px] bg-gray-100 absolute bottom-0 left-1/2 -translate-x-1/2'></div>
+      </div>
+      <div className='mt-4'>
+        <Group justify='space-between' className='mb-2'>
+          <Text size='xs' fw={500} c='dimmed'>
+            Admin
+          </Text>
+        </Group>
+        <div className='flex flex-col gap-2'>{renderMenu(AdminMenus)}</div>
       </div>
       <div className='mt-4'>
         <Group justify='space-between' className='mb-2'>
