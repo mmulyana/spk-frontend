@@ -5,10 +5,7 @@ import { PATH } from '../../utils/constant/_path'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
 import Logo from '../logo'
 
-const AdminMenus = [
-  { label: 'Dashboard', path: PATH.DASHBOARD_ADMIN },
-  { label: 'Account', path: PATH.DASHBOARD_ADMIN_ACCOUNT },
-]
+const AdminMenus = [{ label: 'Akun', path: PATH.DASHBOARD_ADMIN_ACCOUNT }]
 
 const MainMenu = [
   { label: 'Dashboard', path: PATH.DASHBOARD },
@@ -53,18 +50,18 @@ export default function Sidebar() {
       <div className='mt-4'>
         <Group justify='space-between' className='mb-2'>
           <Text size='xs' fw={500} c='dimmed'>
-            Admin
-          </Text>
-        </Group>
-        <div className='flex flex-col gap-2'>{renderMenu(AdminMenus)}</div>
-      </div>
-      <div className='mt-4'>
-        <Group justify='space-between' className='mb-2'>
-          <Text size='xs' fw={500} c='dimmed'>
             Menus
           </Text>
         </Group>
         <div className='flex flex-col gap-2'>{renderMenu(MainMenu)}</div>
+      </div>
+      <div className='mt-4'>
+        <Group justify='space-between' className='mb-2'>
+          <Text size='xs' fw={500} c='dimmed'>
+            Admin
+          </Text>
+        </Group>
+        <div className='flex flex-col gap-2'>{renderMenu(AdminMenus)}</div>
       </div>
 
       <div className='px-4 absolute bottom-4 left-1/2 -translate-x-1/2 h-fit w-full'>
