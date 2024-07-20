@@ -1,5 +1,5 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/16/solid'
-import DashboardLayout from '../_component/layout'
+import DashboardLayout from '../layout'
 import {
   Button,
   Flex,

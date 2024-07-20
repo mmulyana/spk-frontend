@@ -1,5 +1,4 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/16/solid'
-import DashboardLayout from '../_component/layout'
 import {
   Button,
   Flex,
@@ -11,6 +10,7 @@ import {
 import { useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTitle } from '../../../utils/useTitle'
+import DashboardLayout from '../layout'
 
 export default function Page() {
   const [id, setId] = useState(null)

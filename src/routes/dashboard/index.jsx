@@ -1,6 +1,6 @@
 import { Flex, Table } from '@mantine/core'
 import { useTitle } from '../../utils/useTitle'
-import DashboardLayout from './_component/layout'
+import DashboardLayout from './layout'
 import { useMemo } from 'react'
 import { criteria, employees } from '../../data/table'
 import {

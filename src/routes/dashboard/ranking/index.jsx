@@ -1,10 +1,9 @@
-import { PlusIcon } from '@heroicons/react/16/solid'
+import { IconFilter, IconSearch, IconSortAscending } from '@tabler/icons-react'
 import { Button, Flex, Input, Pagination, Table } from '@mantine/core'
-import { useMemo, useState } from 'react'
 import { useTitle } from '../../../utils/useTitle'
 import { employees } from '../../../data/table'
-import DashboardLayout from '../_component/layout'
-import { IconFilter, IconSearch, IconSortAscending } from '@tabler/icons-react'
+import DashboardLayout from '../layout'
+import { useMemo } from 'react'
 
 export default function Page() {
   useTitle('Peringkat')
