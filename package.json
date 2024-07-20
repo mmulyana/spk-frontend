@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ahooksjs/use-url-state": "^3.5.1",
     "@heroicons/react": "^2.1.4",
     "@mantine/core": "^7.10.2",
     "@mantine/form": "^7.10.2",

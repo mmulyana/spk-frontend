@@ -1,31 +1,50 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/16/solid'
 import DashboardLayout from '../layout'
 import {
+  Badge,
   Button,
+  Chip,
   Flex,
   Modal,
   Pagination,
+  rem,
   Select,
   Table,
   Textarea,
   TextInput,
+  Tooltip,
 } from '@mantine/core'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTitle } from '../../../utils/useTitle'
-import { ApplySpkModal, CreateModal, SuccessCreateModal } from './modal'
+import {
+  ApplySpkModal,
+  CreateModal,
+  ModalDelete,
+  ModalEdit,
+  SuccessCreateModal,
+} from './modal'
+import { Link, useNavigate } from 'react-router-dom'
+import { IconCheck, IconX } from '@tabler/icons-react'
+import useUrlState from '@ahooksjs/use-url-state'
+import { PATH } from '../../../utils/constant/_path'
 
 export default function Page() {
   useTitle('Pegawai')
 
+  const navigate = useNavigate()
+
   const [id, setId] = useState(null)
   const [modalState, setModalState] = useState('add')
+  const [url, setUrl] = useUrlState({ check: '' })
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false)
   const [openedDelete, { open: openDelete, close: closeDelete }] =
     useDisclosure(false)
   const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false)
+  const [openedDetail, { open: openDetail, close: closeDetail }] =
+    useDisclosure(false)
 
   const data = useMemo(
     () => [
@@ -33,21 +52,25 @@ export default function Page() {
         id: 'A1',
         name: 'Bambang',
         position: 'pegawai',
+        status: 'done',
       },
       {
         id: 'A2',
         name: 'Fahmi',
         position: 'pegawai',
+        status: 'done',
       },
       {
         id: 'A3',
         name: 'Siti',
         position: 'intern',
+        status: 'not',
       },
       {
         id: 'A4',
         name: 'Ilham',
         position: 'pegawai',
+        status: 'not',
       },
     ],
     []
@@ -81,11 +104,16 @@ export default function Page() {
   const handleClose = () => {
     if (id !== null) setId(null)
 
-    if (openDelete) closeDelete()
+    if (openedDelete) closeDelete()
 
     if (openedEdit) closeEdit()
 
-    if (openAdd) closeAdd()
+    if (openedAdd) closeAdd()
+
+    if (openedDetail) {
+      closeDetail()
+      navigate(PATH.DASHBOARD_EMPLOYEE)
+    }
   }
 
   const rows = data.map((d, index) => (
@@ -93,6 +121,36 @@ export default function Page() {
       <Table.Td>{d.id}</Table.Td>
       <Table.Td>{d.name}</Table.Td>
       <Table.Td>{d.position}</Table.Td>
+      <Table.Td>
+        {d.status === 'done' ? (
+          <Badge variant='light' color='blue' size='sm'>
+            <Flex align='center' gap={2}>
+              <IconCheck style={{ width: rem(16), height: rem(16) }} />
+              Selesai
+            </Flex>
+          </Badge>
+        ) : (
+          <Tooltip
+            label='Klik untuk membuat penilaian'
+            onClick={() => {
+              setUrl({ apply: d.id })
+              openDetail()
+            }}
+          >
+            <Badge
+              className='!cursor-pointer'
+              variant='light'
+              color='red'
+              size='sm'
+            >
+              <Flex align='center' gap={6}>
+                <IconX style={{ width: rem(16), height: rem(16) }} />
+                Belum diberi nilai
+              </Flex>
+            </Badge>
+          </Tooltip>
+        )}
+      </Table.Td>
       <Table.Td className='flex justify-between'>
         <Button
           variant='transparent'
@@ -149,6 +207,9 @@ export default function Page() {
                 <Table.Th className='bg-[#F6F7F9]'>
                   <span className='text-sm font-medium'>Jabatan</span>
                 </Table.Th>
+                <Table.Th className='bg-[#F6F7F9]'>
+                  <span className='text-sm font-medium'>Status</span>
+                </Table.Th>
                 <Table.Th className='w-[120px] bg-[#F6F7F9] rounded-r-md'></Table.Th>
               </Table.Tr>
             </Table.Thead>
@@ -161,81 +222,13 @@ export default function Page() {
         </div>
       </DashboardLayout>
 
-      <Modal
-        opened={openedEdit}
-        onClose={handleClose}
-        title='Edit Pegawai'
-        size='xl'
-      >
-        <form className='w-full'>
-          <Flex gap={16} w='100%'>
-            <TextInput w='50%' label='Nama' />
-            <TextInput w='50%' label='NIP' />
-          </Flex>
-          <Flex gap={16} w='100%' mt={16}>
-            <TextInput w='50%' label='Tempat Lahir' />
-            <TextInput w='50%' label='Tanggal Lahir' type='date' />
-          </Flex>
-          <Flex gap={16} w='100%' mt={16}>
-            <Select
-              w='50%'
-              label='Jenis Kelamin'
-              placeholder='Pilih Jenis Kelamin'
-              data={['Laki-laki', 'perempuan']}
-            />
-            <TextInput w='50%' label='Agama' />
-          </Flex>
-          <Textarea mt={16} label='Alamat' />
-          <Flex gap={16} w='100%' mt={16}>
-            <Select
-              w='50%'
-              label='Pendidikan Terakhir'
-              placeholder='Pilih Pendidikan Terakhir'
-              data={['SMP', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3']}
-            />
-            <Select
-              w='50%'
-              label='Status Pegawai'
-              placeholder='Pilih Status Pegawai'
-              data={['Tetap', 'Kontrak']}
-            />
-          </Flex>
-          <Flex gap={16} w='100%' mt={16}>
-            <Select
-              w='50%'
-              label='Departemen'
-              placeholder='Pilih Departemen'
-              data={['Produksi', 'Keuangan', 'Marketing', 'Sales']}
-            />
-            <Select
-              w='50%'
-              label='Jabatan'
-              placeholder='Pilih Jabatan'
-              data={['Intern', 'Pegawai', 'Supervisor']}
-            />
-          </Flex>
-          <Button
-            mt={20}
-            display='block'
-            size='sm'
-            ml='auto'
-            onClick={() => setModalState('afterAdd')}
-          >
-            Tambah
-          </Button>
-        </form>
-      </Modal>
+      <ModalEdit
+        handleClose={handleClose}
+        openedEdit={openedEdit}
+        setModalState={setModalState}
+      />
 
-      <Modal opened={openedDelete} onClose={handleClose} title='Hapus Pegawai'>
-        <div>
-          <p className='text-lg text-center'>
-            Anda yakin ingin hapus data ini?
-          </p>
-          <Button mt={20} display='block' size='sm' ml='auto' color='red'>
-            Hapus
-          </Button>
-        </div>
-      </Modal>
+      <ModalDelete handleClose={handleClose} openedDelete={openedDelete} />
 
       <Modal
         opened={openedAdd}
@@ -245,6 +238,12 @@ export default function Page() {
       >
         {modalOpenConfig[modalState].component}
       </Modal>
+
+      <Modal
+        opened={openedDetail}
+        title='Buat Penilain'
+        onClose={handleClose}
+      ></Modal>
     </>
   )
 }

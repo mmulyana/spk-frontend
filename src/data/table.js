@@ -27,28 +27,32 @@ export const employees = [
     name: 'Bambang',
     position: 'pegawai',
     role: "Pegawai",
-    email: "example@mail.com"
+    email: "example@mail.com",
+    status: 'done',
   },
   {
     id: 'A2',
     name: 'Fahmi',
     position: 'pegawai',
     role: "Pegawai",
-    email: "example@mail.com"
+    email: "example@mail.com",
+    status: 'done',
   },
   {
     id: 'A3',
     name: 'Siti',
     position: 'intern',
     role: "Pegawai",
-    email: "example@mail.com"
+    email: "example@mail.com",
+    status: 'not',
   },
   {
     id: 'A4',
     name: 'Ilham',
     position: 'pegawai',
     role: "Pegawai",
-    email: "example@mail.com"
+    email: "example@mail.com",
+    status: 'not',
   },
 ]
 
