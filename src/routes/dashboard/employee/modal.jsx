@@ -103,7 +103,7 @@ const marks = [
   { value: 5, label: '5' },
 ]
 
-export function ApplySpkModal({ setModalState, closeAdd }) {
+export function ApplySpkModal({ setModalState, closeAdd, id }) {
   const [value, setValue] = useState({})
 
   async function submit() {
@@ -238,6 +238,60 @@ export function ModalDelete({ openedDelete, handleClose }) {
           Hapus
         </Button>
       </div>
+    </Modal>
+  )
+}
+
+export function EditApplySpkModal({ openedDetail, onClose, id }) {
+  const [value, setValue] = useState({})
+
+  async function submit() {
+    console.log(value)
+    console.log(id)
+
+    onClose()
+  }
+
+  return (
+    <Modal
+      opened={openedDetail}
+      title='Buat Penilaian Pegawai'
+      onClose={onClose}
+    >
+      <Flex direction='column' gap={20} mb={56}>
+        <div>
+          <Text mt='md'>Kriteria 1</Text>
+          <Slider
+            defaultValue={1}
+            label={(val) => marks.find((mark) => mark.value === val).label}
+            step={1}
+            marks={marks}
+            onChangeEnd={(val) => {
+              setValue((prev) => ({ ...prev, kriteria_1: val }))
+            }}
+            max={5}
+            min={1}
+          />
+        </div>
+        <div>
+          <Text mt='md'>Kriteria 2</Text>
+          <Slider
+            defaultValue={1}
+            label={(val) => marks.find((mark) => mark.value === val).label}
+            step={1}
+            marks={marks}
+            onChangeEnd={(val) => {
+              setValue((prev) => ({ ...prev, kriteria_2: val }))
+            }}
+            max={5}
+            min={1}
+          />
+        </div>
+      </Flex>
+
+      <Flex justify='end'>
+        <Button onClick={submit}>Buat</Button>
+      </Flex>
     </Modal>
   )
 }

@@ -20,11 +20,12 @@ import { useTitle } from '../../../utils/useTitle'
 import {
   ApplySpkModal,
   CreateModal,
+  EditApplySpkModal,
   ModalDelete,
   ModalEdit,
   SuccessCreateModal,
 } from './modal'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import useUrlState from '@ahooksjs/use-url-state'
 import { PATH } from '../../../utils/constant/_path'
@@ -36,7 +37,7 @@ export default function Page() {
 
   const [id, setId] = useState(null)
   const [modalState, setModalState] = useState('add')
-  const [url, setUrl] = useUrlState({ check: '' })
+  const [url, setUrl] = useUrlState({ apply: '' })
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false)
@@ -78,8 +79,13 @@ export default function Page() {
 
   const onDeleteModal = (onClose) => {
     onClose?.()
-    setTimeout(() => setModalState('add'), 500)
   }
+
+  useEffect(() => {
+    if (!openedAdd) {
+      setModalState('add')
+    }
+  }, [openedAdd])
 
   const modalOpenConfig = {
     add: {
@@ -96,7 +102,7 @@ export default function Page() {
       component: (
         <ApplySpkModal closeAdd={closeAdd} setModalState={setModalState} />
       ),
-      title: 'Penilaian Pegawai',
+      title: 'Buat Penilaian Pegawai',
       size: 'lg',
     },
   }
@@ -110,10 +116,7 @@ export default function Page() {
 
     if (openedAdd) closeAdd()
 
-    if (openedDetail) {
-      closeDetail()
-      navigate(PATH.DASHBOARD_EMPLOYEE)
-    }
+    if (openedDetail) closeDetail()
   }
 
   const rows = data.map((d, index) => (
@@ -239,11 +242,11 @@ export default function Page() {
         {modalOpenConfig[modalState].component}
       </Modal>
 
-      <Modal
-        opened={openedDetail}
-        title='Buat Penilain'
+      <EditApplySpkModal
+        openedDetail={openedDetail}
         onClose={handleClose}
-      ></Modal>
+        id={url.apply}
+      />
     </>
   )
 }
