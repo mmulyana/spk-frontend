@@ -128,7 +128,7 @@ export default function Page() {
                   <span className='text-sm font-medium'>Email</span>
                 </Table.Th>
                 <Table.Th className='bg-[#F6F7F9]'>
-                  <span className='text-sm font-medium'>Role</span>
+                  <span className='text-sm font-medium'>Jabatan</span>
                 </Table.Th>
               </Table.Tr>
             </Table.Thead>
