@@ -10,13 +10,13 @@ import {
 } from '@mantine/core'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
-import { useTitle } from '../../../../utils/useTitle'
-import { accounts } from '../../../../data/table'
-import DashboardLayout from '../../_component/layout'
+import { useTitle } from '../../../utils/useTitle'
+import { accounts } from '../../../data/table'
+import DashboardAdminLayout from '../layout'
 
 export default function Page() {
-  const [id, setId] = useState(null)
   useTitle('Akun')
+  const [id, setId] = useState(null)
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false)
@@ -68,7 +68,7 @@ export default function Page() {
 
   return (
     <>
-      <DashboardLayout>
+      <DashboardAdminLayout>
         <div className='bg-white p-4 mt-4 rounded-lg border border-gray-600/10'>
           <div className='flex items-center justify-between mb-4'>
             <p className='text-gray-700 font-medium'>Akun</p>
@@ -107,7 +107,7 @@ export default function Page() {
             <Pagination total={10} size='sm' radius='xs' value={1} />
           </Flex>
         </div>
-      </DashboardLayout>
+      </DashboardAdminLayout>
 
       <Modal opened={openedEdit} onClose={handleClose} title='Edit Akun'>
         <form className='flex flex-col gap-4'>
