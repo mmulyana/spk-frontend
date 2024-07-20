@@ -1,15 +1,18 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Suspense, lazy } from 'react'
 import LoaderScreen from '../components/loader'
 import { PATH } from '../utils/constant/_path'
+import { Suspense, lazy } from 'react'
+
 const Login = lazy(() => import('./auth/login'))
 const Register = lazy(() => import('./auth/register'))
 const Dashboard = lazy(() => import('./dashboard/index'))
 const Employee = lazy(() => import('./dashboard/employee/index'))
 const Criteria = lazy(() => import('./dashboard/criteria/index'))
-const Account = lazy(() => import('./dashboard/settings/account/index'))
 const NotFound = lazy(() => import('./not-found/index'))
 const Ranking = lazy(() => import('./dashboard/ranking'))
+
+const Admin_Dashboard = lazy(() => import('./dashboard-admin/index'))
+const Admin_Account = lazy(() => import('./dashboard-admin/account/index'))
 
 const useRoutes = () => [
   {
@@ -37,16 +40,20 @@ const useRoutes = () => [
     component: <Criteria />,
   },
   {
-    path: PATH.DASHBOARD_ADMIN_ACCOUNT,
-    component: <Account />,
-  },
-  {
     path: PATH.NOT_FOUND,
     component: <NotFound />,
   },
   {
     path: PATH.DASHBOARD_RESULT,
     component: <Ranking />,
+  },
+  {
+    path: PATH.DASHBOARD_ADMIN,
+    component: <Admin_Dashboard />,
+  },
+  {
+    path: PATH.DASHBOARD_ADMIN_ACCOUNT,
+    component: <Admin_Account />,
   },
 ]
 
