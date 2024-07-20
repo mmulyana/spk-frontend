@@ -1,5 +1,20 @@
-import { IconFilter, IconSearch, IconSortAscending } from '@tabler/icons-react'
-import { Button, Flex, Input, Pagination, Table } from '@mantine/core'
+import {
+  IconCheck,
+  IconFilter,
+  IconSearch,
+  IconSortAscending,
+} from '@tabler/icons-react'
+import {
+  Button,
+  Flex,
+  Input,
+  Menu,
+  Pagination,
+  Popover,
+  rem,
+  Select,
+  Table,
+} from '@mantine/core'
 import { useTitle } from '../../../utils/useTitle'
 import { employees } from '../../../data/table'
 import DashboardLayout from '../layout'
@@ -31,26 +46,76 @@ export default function Page() {
               leftSection={<IconSearch className='w-4' />}
             />
             <Flex gap={8} align='center'>
-              <Button
-                pl={5}
-                size='compact-sm'
-                className='!bg-transparent !text-gray-900 hover:!bg-gray-100'
-              >
-                <Flex align='center' gap={4}>
-                  <IconFilter className='w-5 text-gray-400' />
-                  <span>Filter</span>
-                </Flex>
-              </Button>
-              <Button
-                pl={5}
-                size='compact-sm'
-                className='!bg-transparent !text-gray-900 hover:!bg-gray-100'
-              >
-                <Flex align='center' gap={4}>
-                  <IconSortAscending className='w-5 text-gray-400' />
-                  <span>Sort</span>
-                </Flex>
-              </Button>
+              <Popover width={300} position='bottom-end' withArrow shadow='md'>
+                <Popover.Target>
+                  <Button
+                    pl={5}
+                    size='compact-sm'
+                    className='!bg-transparent !text-gray-900 hover:!bg-gray-100'
+                  >
+                    <Flex align='center' gap={4}>
+                      <IconFilter className='w-5 text-gray-400' />
+                      <span>Filter</span>
+                    </Flex>
+                  </Button>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Flex direction='column' gap={8}>
+                    <Select
+                      label='Jenis Kelamin'
+                      placeholder='Select'
+                      comboboxProps={{ withinPortal: false }}
+                      data={['Laki-laki', 'Perempuan']}
+                    />
+                    <Select
+                      label='Jabatan'
+                      placeholder='Select'
+                      comboboxProps={{ withinPortal: false }}
+                      data={['Pegawai', 'Supervisor', 'Manager']}
+                    />
+                  </Flex>
+                </Popover.Dropdown>
+              </Popover>
+
+              <Popover width={300} position='bottom-end' withArrow shadow='md'>
+                <Popover.Target>
+                  <Button
+                    pl={5}
+                    size='compact-sm'
+                    className='!bg-transparent !text-gray-900 hover:!bg-gray-100'
+                  >
+                    <Flex align='center' gap={4}>
+                      <IconSortAscending className='w-5 text-gray-400' />
+                      <span>Sort</span>
+                    </Flex>
+                  </Button>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Flex direction='column' gap={4}>
+                    <Button
+                      justify='space-between'
+                      variant='filled'
+                      className='!font-normal'
+                      fullWidth
+                      rightSection={
+                        <IconCheck
+                          style={{ width: rem(16), height: rem(16) }}
+                        />
+                      }
+                    >
+                      Urut dari rangking teratas
+                    </Button>
+                    <Button
+                      className='!font-normal'
+                      variant='subtle'
+                      justify='space-between'
+                      fullWidth
+                    >
+                      Urut dari rangking terbawah
+                    </Button>
+                  </Flex>
+                </Popover.Dropdown>
+              </Popover>
             </Flex>
           </Flex>
           <Table className='rounded-md'>
