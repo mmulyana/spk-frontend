@@ -10,8 +10,11 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../utils/use-auth'
 
 export default function Login() {
+  const { login } = useAuth()
+  
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -20,12 +23,8 @@ export default function Login() {
     },
   })
 
-  const navigate = useNavigate()
-
   const submit = (data) => {
-    console.log(data)
-
-    navigate('/dashboard')
+    login(data)
   }
 
   return (
