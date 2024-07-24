@@ -6,7 +6,7 @@ const createPegawai = async (payload) => {
   return await http.post(URL.PEGAWAI, payload)
 }
 const updatePegawai = async (payload) => {
-  return await http.patch(`${URL.KRITERIA}/${payload.id}`, payload)
+  return await http.patch(`${URL.PEGAWAI}/${payload.id}`, payload)
 }
 const deletePegawai = async (id) => {
   return await http.delete(`${URL.PEGAWAI}/${id}`)
