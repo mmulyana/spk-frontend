@@ -8,11 +8,11 @@ import { userAtom } from '../atom/user'
 import { toast } from 'sonner'
 import { CookieKeys, CookieStorage } from './cookie'
 
-const fetcherLogin = async (payload) => {
-  return http.post(URL.LOGIN, payload)
+const loginFetcher = async (payload) => {
+  return await http.post(URL.LOGIN, payload)
 }
-const fetcherRegister = async (payload) => {
-  return http.post(URL.REGISTER, payload)
+const registerFetcher = async (payload) => {
+  return await http.post(URL.REGISTER, payload)
 }
 
 export const useAuth = () => {
@@ -20,7 +20,7 @@ export const useAuth = () => {
   const setUser = useSetAtom(userAtom)
 
   const { mutate: login } = useMutation({
-    mutationFn: fetcherLogin,
+    mutationFn: loginFetcher,
     onError: (error) => {
       toast.error('Login gagal silahkan ulangi')
     },
@@ -37,7 +37,7 @@ export const useAuth = () => {
   })
 
   const { mutate: register } = useMutation({
-    mutationFn: fetcherRegister,
+    mutationFn: registerFetcher,
     onError: (error) => {
       toast.error('Register gagal silahkan ulangi')
     },
