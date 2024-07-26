@@ -25,57 +25,26 @@ import {
   ModalEdit,
   SuccessCreateModal,
 } from './modal'
-import { useNavigate } from 'react-router-dom'
 import { IconCheck, IconX } from '@tabler/icons-react'
-import useUrlState from '@ahooksjs/use-url-state'
-import { PATH } from '../../../utils/constant/_path'
+import { usePegawai } from '../../../utils/use-pegawai'
 
 export default function Page() {
   useTitle('Pegawai')
 
-  const navigate = useNavigate()
+  const { data: dataPegawai, isLoading } = usePegawai()
 
   const [id, setId] = useState(null)
   const [modalState, setModalState] = useState('add')
-  const [url, setUrl] = useUrlState({ apply: '' })
 
-  const [openedEdit, { open: openEdit, close: closeEdit }] =
-    useDisclosure(false)
-  const [openedDelete, { open: openDelete, close: closeDelete }] =
-    useDisclosure(false)
   const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false)
-  const [openedDetail, { open: openDetail, close: closeDetail }] =
-    useDisclosure(false)
+  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false)
+  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false)
+  const [openedDetail, { open: openDetail, close: closeDetail }] = useDisclosure(false)
 
-  const data = useMemo(
-    () => [
-      {
-        id: 'A1',
-        name: 'Bambang',
-        position: 'pegawai',
-        status: 'done',
-      },
-      {
-        id: 'A2',
-        name: 'Fahmi',
-        position: 'pegawai',
-        status: 'done',
-      },
-      {
-        id: 'A3',
-        name: 'Siti',
-        position: 'intern',
-        status: 'not',
-      },
-      {
-        id: 'A4',
-        name: 'Ilham',
-        position: 'pegawai',
-        status: 'not',
-      },
-    ],
-    []
-  )
+  const data = useMemo(() => {
+    if (isLoading) return []
+    return dataPegawai?.data?.data
+  }, [dataPegawai, isLoading])
 
   const onDeleteModal = (onClose) => {
     onClose?.()
@@ -119,13 +88,13 @@ export default function Page() {
     if (openedDetail) closeDetail()
   }
 
-  const rows = data.map((d, index) => (
+  const rows = data?.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
       <Table.Td>{d.id}</Table.Td>
-      <Table.Td>{d.name}</Table.Td>
-      <Table.Td>{d.position}</Table.Td>
+      <Table.Td>{d.nama}</Table.Td>
+      <Table.Td>{d.jabatan}</Table.Td>
       <Table.Td>
-        {d.status === 'done' ? (
+        {d.status === 'SUDAH' ? (
           <Badge variant='light' color='blue' size='sm'>
             <Flex align='center' gap={2}>
               <IconCheck style={{ width: rem(16), height: rem(16) }} />
@@ -136,7 +105,7 @@ export default function Page() {
           <Tooltip
             label='Klik untuk membuat penilaian'
             onClick={() => {
-              setUrl({ apply: d.id })
+              setId(d.id)
               openDetail()
             }}
           >
@@ -229,6 +198,7 @@ export default function Page() {
         handleClose={handleClose}
         openedEdit={openedEdit}
         setModalState={setModalState}
+        id={id}
       />
 
       <ModalDelete handleClose={handleClose} openedDelete={openedDelete} />
@@ -245,7 +215,7 @@ export default function Page() {
       <EditApplySpkModal
         openedDetail={openedDetail}
         onClose={handleClose}
-        id={url.apply}
+        id={id}
       />
     </>
   )

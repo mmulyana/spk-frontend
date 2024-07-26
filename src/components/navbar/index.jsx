@@ -1,10 +1,7 @@
 import { useAtomValue } from 'jotai'
 import { headerTitle } from '../../atom/common'
-import { Button, Divider, Flex } from '@mantine/core'
-import { Cog6ToothIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { Flex } from '@mantine/core'
 import { UserButton } from '../UserButtton'
-import { Link } from 'react-router-dom'
-import { PATH } from '../../utils/constant/_path'
 
 export default function Navbar() {
   const title = useAtomValue(headerTitle)
