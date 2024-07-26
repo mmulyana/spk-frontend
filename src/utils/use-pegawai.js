@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { URL } from './constant/_urls'
 import http from './http'
+import { KEYS } from './constant/_key'
+import { toast } from 'sonner'
 
 const createPegawai = async (payload) => {
   return await http.post(URL.PEGAWAI, payload)
@@ -11,9 +13,11 @@ const updatePegawai = async (payload) => {
 const deletePegawai = async (id) => {
   return await http.delete(`${URL.PEGAWAI}/${id}`)
 }
-const getPegawai = async (id) => {
-  if (!!id) return await http(`${URL.PEGAWAI}/${id}`)
+const getPegawai = async () => {
   return await http(URL.PEGAWAI)
+}
+const getDetailPegawai = async (id) => {
+  return await http(`${URL.PEGAWAI}/${id}`)
 }
 
 export const usePegawai = () => {
@@ -25,7 +29,7 @@ export const usePegawai = () => {
 
 export const useDetailPegawai = (id) => {
   return useQuery({
-    queryFn: () => getPegawai(id),
+    queryFn: () => getDetailPegawai(id),
     queryKey: [KEYS.PEGAWAI, id],
     enabled: !!id,
   })
