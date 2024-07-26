@@ -5,14 +5,26 @@ import Routers from './routes'
 import './global.css'
 import '@mantine/core/styles.css'
 import { Toaster } from 'sonner'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const theme = createTheme({})
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 0,
+    },
+  },
+})
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <MantineProvider theme={theme}>
-      <Routers />
-      <Toaster />
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme}>
+        <Routers />
+        <Toaster richColors />
+      </MantineProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 )
