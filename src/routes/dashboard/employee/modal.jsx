@@ -8,18 +8,69 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core'
-import { useState } from 'react'
+import { useForm } from '@mantine/form'
+import { useEffect, useState } from 'react'
+import {
+  useCreatePegawai,
+  useDetailPegawai,
+  useUpdatePegawai,
+} from '../../../utils/use-pegawai'
 
 export function CreateModal({ setModalState }) {
+  const { mutate } = useCreatePegawai()
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      nama: '',
+      NIP: '',
+      tempat_lahir: '',
+      tanggal_lahir: '',
+      jenis_kelamin: '',
+      agama: '',
+      alamat: '',
+      pendidikan_terakhir: '',
+      status_pegawai: '',
+      departemen: '',
+      jabatan: '',
+    },
+  })
+
+  const submit = async (data) => {
+    await mutate(data)
+    setModalState('afterAdd')
+  }
+
   return (
-    <form className='w-full'>
+    <form className='w-full' onSubmit={form.onSubmit(submit)}>
       <Flex gap={16} w='100%'>
-        <TextInput w='50%' label='Nama' />
-        <TextInput w='50%' label='NIP' />
+        <TextInput
+          w='50%'
+          label='Nama'
+          key={form.key('nama')}
+          {...form.getInputProps('nama')}
+        />
+        <TextInput
+          w='50%'
+          label='NIP'
+          key={form.key('NIP')}
+          {...form.getInputProps('NIP')}
+        />
       </Flex>
       <Flex gap={16} w='100%' mt={16}>
-        <TextInput w='50%' label='Tempat Lahir' />
-        <TextInput w='50%' label='Tanggal Lahir' type='date' />
+        <TextInput
+          w='50%'
+          label='Tempat Lahir'
+          key={form.key('tempat_lahir')}
+          {...form.getInputProps('tempat_lahir')}
+        />
+        <TextInput
+          w='50%'
+          label='Tanggal Lahir'
+          type='date'
+          key={form.key('tanggal_lahir')}
+          {...form.getInputProps('tanggal_lahir')}
+        />
       </Flex>
       <Flex gap={16} w='100%' mt={16}>
         <Select
@@ -27,22 +78,38 @@ export function CreateModal({ setModalState }) {
           label='Jenis Kelamin'
           placeholder='Pilih Jenis Kelamin'
           data={['Laki-laki', 'perempuan']}
+          key={form.key('jenis_kelamin')}
+          {...form.getInputProps('jenis_kelamin')}
         />
-        <TextInput w='50%' label='Agama' />
+        <TextInput
+          w='50%'
+          label='Agama'
+          key={form.key('agama')}
+          {...form.getInputProps('agama')}
+        />
       </Flex>
-      <Textarea mt={16} label='Alamat' />
+      <Textarea
+        mt={16}
+        label='Alamat'
+        key={form.key('alamat')}
+        {...form.getInputProps('alamat')}
+      />
       <Flex gap={16} w='100%' mt={16}>
         <Select
           w='50%'
           label='Pendidikan Terakhir'
           placeholder='Pilih Pendidikan Terakhir'
           data={['SMP', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3']}
+          key={form.key('pendidikan_terakhir')}
+          {...form.getInputProps('pendidikan_terakhir')}
         />
         <Select
           w='50%'
           label='Status Pegawai'
           placeholder='Pilih Status Pegawai'
           data={['Tetap', 'Kontrak']}
+          key={form.key('status_pegawai')}
+          {...form.getInputProps('status_pegawai')}
         />
       </Flex>
       <Flex gap={16} w='100%' mt={16}>
@@ -51,22 +118,20 @@ export function CreateModal({ setModalState }) {
           label='Departemen'
           placeholder='Pilih Departemen'
           data={['Produksi', 'Keuangan', 'Marketing', 'Sales']}
+          key={form.key('departemen')}
+          {...form.getInputProps('departemen')}
         />
         <Select
           w='50%'
           label='Jabatan'
           placeholder='Pilih Jabatan'
           data={['Intern', 'Pegawai', 'Supervisor']}
+          key={form.key('jabatan')}
+          {...form.getInputProps('jabatan')}
         />
       </Flex>
-      <Button
-        mt={20}
-        display='block'
-        size='sm'
-        ml='auto'
-        onClick={() => setModalState('afterAdd')}
-      >
-        Tambah
+      <Button mt={20} display='block' size='sm' ml='auto' type='submit'>
+        Simpan
       </Button>
     </form>
   )
@@ -160,7 +225,53 @@ export function ApplySpkModal({ setModalState, closeAdd, id }) {
   )
 }
 
-export function ModalEdit({ openedEdit, handleClose, setModalState }) {
+export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
+  const { data, isLoading } = useDetailPegawai(id)
+  const { mutate } = useUpdatePegawai()
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      id: '',
+      nama: '',
+      NIP: '',
+      tempat_lahir: '',
+      tanggal_lahir: '',
+      jenis_kelamin: '',
+      agama: '',
+      alamat: '',
+      pendidikan_terakhir: '',
+      status_pegawai: '',
+      departemen: '',
+      jabatan: '',
+    },
+  })
+
+  useEffect(() => {
+    if (!isLoading) {
+      const user = data?.data?.data
+      form.setValues({
+        id: user?.id,
+        nama: user?.nama,
+        NIP: user?.NIP,
+        tempat_lahir: user?.tempat_lahir,
+        tanggal_lahir: user?.tanggal_lahir,
+        jenis_kelamin: user?.jenis_kelamin,
+        agama: user?.agama,
+        alamat: user?.alamat,
+        pendidikan_terakhir: user?.pendidikan_terakhir,
+        status_pegawai: user?.status_pegawai,
+        departemen: user?.departemen,
+        jabatan: user?.jabatan,
+      })
+    }
+  }, [isLoading])
+
+  const submit = async (data) => {
+    await mutate(data)
+    handleClose()
+  }
+
   return (
     <Modal
       opened={openedEdit}
@@ -168,14 +279,40 @@ export function ModalEdit({ openedEdit, handleClose, setModalState }) {
       title='Edit Pegawai'
       size='xl'
     >
-      <form className='w-full'>
+      <form className='w-full' onSubmit={form.onSubmit(submit)}>
         <Flex gap={16} w='100%'>
-          <TextInput w='50%' label='Nama' />
-          <TextInput w='50%' label='NIP' />
+          <TextInput
+            key={form.key('id')}
+            {...form.getInputProps('id')}
+            className='hidden'
+          />
+          <TextInput
+            w='50%'
+            label='Nama'
+            key={form.key('nama')}
+            {...form.getInputProps('nama')}
+          />
+          <TextInput
+            w='50%'
+            label='NIP'
+            key={form.key('NIP')}
+            {...form.getInputProps('NIP')}
+          />
         </Flex>
         <Flex gap={16} w='100%' mt={16}>
-          <TextInput w='50%' label='Tempat Lahir' />
-          <TextInput w='50%' label='Tanggal Lahir' type='date' />
+          <TextInput
+            w='50%'
+            label='Tempat Lahir'
+            key={form.key('tempat_lahir')}
+            {...form.getInputProps('tempat_lahir')}
+          />
+          <TextInput
+            w='50%'
+            label='Tanggal Lahir'
+            type='date'
+            key={form.key('tanggal_lahir')}
+            {...form.getInputProps('tanggal_lahir')}
+          />
         </Flex>
         <Flex gap={16} w='100%' mt={16}>
           <Select
@@ -183,22 +320,38 @@ export function ModalEdit({ openedEdit, handleClose, setModalState }) {
             label='Jenis Kelamin'
             placeholder='Pilih Jenis Kelamin'
             data={['Laki-laki', 'perempuan']}
+            key={form.key('jenis_kelamin')}
+            {...form.getInputProps('jenis_kelamin')}
           />
-          <TextInput w='50%' label='Agama' />
+          <TextInput
+            w='50%'
+            label='Agama'
+            key={form.key('agama')}
+            {...form.getInputProps('agama')}
+          />
         </Flex>
-        <Textarea mt={16} label='Alamat' />
+        <Textarea
+          mt={16}
+          label='Alamat'
+          key={form.key('alamat')}
+          {...form.getInputProps('alamat')}
+        />
         <Flex gap={16} w='100%' mt={16}>
           <Select
             w='50%'
             label='Pendidikan Terakhir'
             placeholder='Pilih Pendidikan Terakhir'
             data={['SMP', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3']}
+            key={form.key('pendidikan_terakhir')}
+            {...form.getInputProps('pendidikan_terakhir')}
           />
           <Select
             w='50%'
             label='Status Pegawai'
             placeholder='Pilih Status Pegawai'
             data={['Tetap', 'Kontrak']}
+            key={form.key('status_pegawai')}
+            {...form.getInputProps('status_pegawai')}
           />
         </Flex>
         <Flex gap={16} w='100%' mt={16}>
@@ -207,22 +360,20 @@ export function ModalEdit({ openedEdit, handleClose, setModalState }) {
             label='Departemen'
             placeholder='Pilih Departemen'
             data={['Produksi', 'Keuangan', 'Marketing', 'Sales']}
+            key={form.key('departemen')}
+            {...form.getInputProps('departemen')}
           />
           <Select
             w='50%'
             label='Jabatan'
             placeholder='Pilih Jabatan'
             data={['Intern', 'Pegawai', 'Supervisor']}
+            key={form.key('jabatan')}
+            {...form.getInputProps('jabatan')}
           />
         </Flex>
-        <Button
-          mt={20}
-          display='block'
-          size='sm'
-          ml='auto'
-          onClick={() => setModalState('afterAdd')}
-        >
-          Tambah
+        <Button mt={20} display='block' size='sm' ml='auto' type='submit'>
+          Simpan
         </Button>
       </form>
     </Modal>
