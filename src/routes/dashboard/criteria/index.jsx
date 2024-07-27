@@ -12,7 +12,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { useTitle } from '../../../utils/useTitle'
 import DashboardLayout from '../layout'
 import { useKriteria } from '../../../utils/use-kriteria'
-import { AddModal } from './modal'
+import { AddModal, DeleteModal, EditModal } from './modal'
 
 export default function Page() {
   const [id, setId] = useState(null)
@@ -30,8 +30,6 @@ export default function Page() {
     return dataKriteria?.data?.data
   }, [dataKriteria, isLoading])
 
-  console.log(data)
-
   const handleClose = () => {
     if (id !== null) setId(null)
 
@@ -44,8 +42,8 @@ export default function Page() {
 
   const rows = data.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
-      <Table.Td>{d.name}</Table.Td>
-      <Table.Td>{d.value}</Table.Td>
+      <Table.Td>{d.nama}</Table.Td>
+      <Table.Td>{d.bobot}</Table.Td>
       <Table.Td className='flex justify-between'>
         <Button
           variant='transparent'
@@ -97,7 +95,7 @@ export default function Page() {
                   <span className='text-sm font-medium'>Nama</span>
                 </Table.Th>
                 <Table.Th className='bg-[#F6F7F9]'>
-                  <span className='text-sm font-medium'>Value</span>
+                  <span className='text-sm font-medium'>Bobot</span>
                 </Table.Th>
                 <Table.Th className='w-[120px] bg-[#F6F7F9] rounded-r-md'></Table.Th>
               </Table.Tr>
@@ -112,6 +110,12 @@ export default function Page() {
       </DashboardLayout>
 
       <AddModal openedAdd={openedAdd} handleClose={handleClose} />
+      <EditModal openedEdit={openedEdit} handleClose={handleClose} id={id} />
+      <DeleteModal
+        openedDelete={openedDelete}
+        handleClose={handleClose}
+        id={id}
+      />
     </>
   )
 }
