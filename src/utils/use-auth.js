@@ -23,7 +23,7 @@ export const useAuth = () => {
   const { mutate: login } = useMutation({
     mutationFn: loginFetcher,
     onError: (error) => {
-      toast.error(error.message)
+      toast.error(error.response.data.message || 'Login gagal silahkan ulangi')
     },
     onSuccess: (data) => {
       const token = data.data.data.token
@@ -40,7 +40,9 @@ export const useAuth = () => {
   const { mutate: register } = useMutation({
     mutationFn: registerFetcher,
     onError: (error) => {
-      toast.error('Register gagal silahkan ulangi')
+      toast.error(
+        error.response.data.message || 'Register gagal silahkan ulangi'
+      )
     },
     onSuccess: (data) => {
       navigate(PATH.LOGIN)
