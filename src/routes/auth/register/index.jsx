@@ -9,9 +9,11 @@ import {
 import { useForm } from '@mantine/form'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../../utils/use-auth'
+import useUrlState from '@ahooksjs/use-url-state'
 
 export default function Register() {
   const { register } = useAuth()
+  const [url, setUrl] = useUrlState({ role: '' })
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -32,7 +34,7 @@ export default function Register() {
   })
 
   const submit = (data) => {
-    register(data)
+    register({ ...data, role: url.role || 'MANAGER' })
   }
 
   return (
