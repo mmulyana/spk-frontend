@@ -100,7 +100,17 @@ export function CreateModal({ setModalState }) {
           w='50%'
           label='Pendidikan Terakhir'
           placeholder='Pilih Pendidikan Terakhir'
-          data={['SMP', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3']}
+          data={[
+            'SMP',
+            'SMA',
+            'D1',
+            'D2',
+            'D3',
+            'D4',
+            'S1',
+            'S2',
+            'S3',
+          ].reverse()}
           key={form.key('pendidikan_terakhir')}
           {...form.getInputProps('pendidikan_terakhir')}
         />
@@ -383,7 +393,7 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
 
 export function ModalDelete({ openedDelete, handleClose, id }) {
   const { mutate } = useDeletePegawai()
-  
+
   const submit = () => {
     mutate(id)
     handleClose()
@@ -393,7 +403,14 @@ export function ModalDelete({ openedDelete, handleClose, id }) {
     <Modal opened={openedDelete} onClose={handleClose} title='Hapus Pegawai'>
       <div>
         <p className='text-lg text-center'>Anda yakin ingin hapus data ini?</p>
-        <Button mt={20} display='block' size='sm' ml='auto' color='red' onClick={submit}>
+        <Button
+          mt={20}
+          display='block'
+          size='sm'
+          ml='auto'
+          color='red'
+          onClick={submit}
+        >
           Hapus
         </Button>
       </div>
