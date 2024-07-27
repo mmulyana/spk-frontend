@@ -12,6 +12,7 @@ import { useForm } from '@mantine/form'
 import { useEffect, useState } from 'react'
 import {
   useCreatePegawai,
+  useDeletePegawai,
   useDetailPegawai,
   useUpdatePegawai,
 } from '../../../utils/use-pegawai'
@@ -380,12 +381,19 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
   )
 }
 
-export function ModalDelete({ openedDelete, handleClose }) {
+export function ModalDelete({ openedDelete, handleClose, id }) {
+  const { mutate } = useDeletePegawai()
+  
+  const submit = () => {
+    mutate(id)
+    handleClose()
+  }
+
   return (
     <Modal opened={openedDelete} onClose={handleClose} title='Hapus Pegawai'>
       <div>
         <p className='text-lg text-center'>Anda yakin ingin hapus data ini?</p>
-        <Button mt={20} display='block' size='sm' ml='auto' color='red'>
+        <Button mt={20} display='block' size='sm' ml='auto' color='red' onClick={submit}>
           Hapus
         </Button>
       </div>
