@@ -37,9 +37,12 @@ export default function Page() {
   const [modalState, setModalState] = useState('add')
 
   const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false)
-  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false)
-  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false)
-  const [openedDetail, { open: openDetail, close: closeDetail }] = useDisclosure(false)
+  const [openedEdit, { open: openEdit, close: closeEdit }] =
+    useDisclosure(false)
+  const [openedDelete, { open: openDelete, close: closeDelete }] =
+    useDisclosure(false)
+  const [openedDetail, { open: openDetail, close: closeDetail }] =
+    useDisclosure(false)
 
   const data = useMemo(() => {
     if (isLoading) return []
@@ -201,7 +204,11 @@ export default function Page() {
         id={id}
       />
 
-      <ModalDelete handleClose={handleClose} openedDelete={openedDelete} />
+      <ModalDelete
+        handleClose={handleClose}
+        openedDelete={openedDelete}
+        id={id}
+      />
 
       <Modal
         opened={openedAdd}
