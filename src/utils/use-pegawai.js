@@ -69,7 +69,7 @@ export const useUpdatePegawai = (id) => {
   return { mutate }
 }
 
-export const useDeleteKriteria = (id) => {
+export const useDeletePegawai = () => {
   const queryClient = useQueryClient()
 
   const { mutate } = useMutation({
