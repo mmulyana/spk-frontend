@@ -7,6 +7,7 @@ import { useSetAtom } from 'jotai'
 import { userAtom } from '../atom/user'
 import { toast } from 'sonner'
 import { CookieKeys, CookieStorage } from './cookie'
+import { jwtDecode } from 'jwt-decode'
 
 const loginFetcher = async (payload) => {
   return await http.post(URL.LOGIN, payload)
@@ -22,15 +23,15 @@ export const useAuth = () => {
   const { mutate: login } = useMutation({
     mutationFn: loginFetcher,
     onError: (error) => {
-      toast.error('Login gagal silahkan ulangi')
+      toast.error(error.message)
     },
     onSuccess: (data) => {
-      const payload = {
-        email: data.data.email,
-        role: data.data.role,
-      }
-      setUser(payload)
-      CookieStorage.set(CookieKeys.AuthToken, data.data.data.token)
+      const token = data.data.data.token
+      const decoded = jwtDecode(token)
+
+      setUser({ nama: decoded.nama, email: decoded.email, role: decoded.role })
+      CookieStorage.set(CookieKeys.AuthToken, token)
+
       navigate(PATH.DASHBOARD)
       toast.success('Login berhasil')
     },
