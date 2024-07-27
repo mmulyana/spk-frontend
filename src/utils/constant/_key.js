@@ -1,6 +1,6 @@
 export const KEYS = {
   KRITERIA: 'kriteria',
-  DASHBOARD_WIDGET: 'widget',
+  DASHBOARD: 'dashboard',
   PEGAWAI: 'pegawai',
   AKUN: 'akun',
 }
