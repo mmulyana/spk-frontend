@@ -11,10 +11,13 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTitle } from '../../../utils/useTitle'
 import DashboardLayout from '../layout'
+import { useKriteria } from '../../../utils/use-kriteria'
+import { AddModal } from './modal'
 
 export default function Page() {
   const [id, setId] = useState(null)
   useTitle('Kriteria')
+  const { data: dataKriteria, isLoading } = useKriteria()
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false)
@@ -22,31 +25,12 @@ export default function Page() {
     useDisclosure(false)
   const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false)
 
-  const data = useMemo(
-    () => [
-      {
-        id: 1,
-        name: 'Sangat baik',
-        value: 10,
-      },
-      {
-        id: 2,
-        name: 'Baik',
-        value: 8,
-      },
-      {
-        id: 3,
-        name: 'Cukup',
-        value: 5,
-      },
-      {
-        id: 4,
-        name: 'Buruk',
-        value: 0,
-      },
-    ],
-    []
-  )
+  const data = useMemo(() => {
+    if (isLoading) return []
+    return dataKriteria?.data?.data
+  }, [dataKriteria, isLoading])
+
+  console.log(data)
 
   const handleClose = () => {
     if (id !== null) setId(null)
@@ -126,34 +110,8 @@ export default function Page() {
           </Flex>
         </div>
       </DashboardLayout>
-      <Modal opened={openedEdit} onClose={handleClose} title='Edit Kriteria'>
-        <form>
-          <TextInput label='Nama' />
-          <TextInput label='Nilai' mt={8} />
-          <Button mt={20} display='block' size='sm' ml='auto'>
-            Simpan
-          </Button>
-        </form>
-      </Modal>
-      <Modal opened={openedDelete} onClose={handleClose} title='Hapus Kriteria'>
-        <div>
-          <p className='text-lg text-center'>
-            Anda yakin ingin hapus data ini?
-          </p>
-          <Button mt={20} display='block' size='sm' ml='auto' color='red'>
-            Hapus
-          </Button>
-        </div>
-      </Modal>
-      <Modal opened={openedAdd} onClose={handleClose} title='Tambah Kriteria'>
-        <form>
-          <TextInput label='Nama' />
-          <TextInput label='Nilai' mt={8} />
-          <Button mt={20} display='block' size='sm' ml='auto'>
-            Tambah
-          </Button>
-        </form>
-      </Modal>
+
+      <AddModal openedAdd={openedAdd} handleClose={handleClose} />
     </>
   )
 }
