@@ -9,25 +9,29 @@ import {
   UserIcon,
   UsersIcon,
 } from '@heroicons/react/24/solid'
+import { useDashboard } from '../../utils/use-dashboard'
 
 export default function MainDashboard() {
   useTitle('Dashboard')
+  const { data: dataDashboard, isLoading } = useDashboard()
 
-  const criteriaData = useMemo(() => criteria, [])
-  const employeeData = useMemo(() => employees, [])
+  const data = useMemo(() => {
+    if (isLoading) return []
+    return dataDashboard?.data?.data
+  }, [dataDashboard, isLoading])
 
-  const criteriaRows = criteriaData.map((d, index) => (
+  const criteriaRows = data?.kriteria?.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
-      <Table.Td>{d.name}</Table.Td>
-      <Table.Td>{d.value}</Table.Td>
+      <Table.Td>{d.nama}</Table.Td>
+      <Table.Td>{d.bobot}</Table.Td>
     </Table.Tr>
   ))
 
-  const employeeRows = employeeData.map((d, index) => (
+  const employeeRows = data?.pegawai?.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
       <Table.Td>{d.id}</Table.Td>
-      <Table.Td>{d.name}</Table.Td>
-      <Table.Td>{d.position}</Table.Td>
+      <Table.Td>{d.nama}</Table.Td>
+      <Table.Td>{d.jabatan}</Table.Td>
     </Table.Tr>
   ))
 
@@ -42,7 +46,9 @@ export default function MainDashboard() {
               </div>
               <div>
                 <p className='text-sm text-gray-400'>Pegawai</p>
-                <p className='text-4xl font-medium text-gray-700'>48</p>
+                <p className='text-4xl font-medium text-gray-700'>
+                  {data?.count?.pegawai}
+                </p>
               </div>
             </Flex>
           </div>
@@ -53,7 +59,9 @@ export default function MainDashboard() {
               </div>
               <div>
                 <p className='text-sm text-gray-400'>Pegawai Terbaik</p>
-                <p className='text-4xl font-medium text-gray-700'>48</p>
+                <p className='text-4xl font-medium text-gray-700'>
+                  {data?.count?.sudah}
+                </p>
               </div>
             </Flex>
           </div>
@@ -64,7 +72,9 @@ export default function MainDashboard() {
               </div>
               <div>
                 <p className='text-sm text-gray-400'>Kriteria</p>
-                <p className='text-4xl font-medium text-gray-700'>48</p>
+                <p className='text-4xl font-medium text-gray-700'>
+                  {data?.count?.kriteria}
+                </p>
               </div>
             </Flex>
           </div>
@@ -75,7 +85,9 @@ export default function MainDashboard() {
               </div>
               <div>
                 <p className='text-sm text-gray-400'>Akun</p>
-                <p className='text-4xl font-medium text-gray-700'>48</p>
+                <p className='text-4xl font-medium text-gray-700'>
+                  {data?.count?.akun}
+                </p>
               </div>
             </Flex>
           </div>
