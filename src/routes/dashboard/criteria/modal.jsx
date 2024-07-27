@@ -2,35 +2,108 @@ import {
   Button,
   Flex,
   Modal,
-  Select,
-  Slider,
-  Text,
+  NumberInput,
   Textarea,
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useCreateKriteria } from '../../../utils/use-kriteria'
+import {
+  useCreateKriteria,
+  useDetailKriteria,
+  useUpdateKriteria,
+  useDeleteKriteria
+} from '../../../utils/use-kriteria'
+import { useEffect } from 'react'
 
 export function EditModal({ openedEdit, handleClose, id }) {
+  const { data, isLoading } = useDetailKriteria(id)
+  const { mutate } = useUpdateKriteria()
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      id: '',
+      nama: '',
+      bobot: 0,
+      minimum: 0,
+      keterangan: '',
+    },
+  })
+
+  useEffect(() => {
+    if (!isLoading) {
+      const kriteria = data?.data?.data
+      form.setValues({
+        bobot: kriteria?.bobot,
+        nama: kriteria?.nama,
+        minimum: kriteria?.minimum,
+        keterangan: kriteria?.keterangan,
+        id: kriteria?.id,
+      })
+    }
+  }, [isLoading, data])
+
+  const submit = (data) => {
+    const payload = {
+      ...data,
+      bobot: parseFloat(data.bobot),
+      minimum: parseFloat(data.minimum),
+    }
+    mutate(payload)
+    handleClose()
+  }
+
   return (
     <Modal opened={openedEdit} onClose={handleClose} title='Edit Kriteria'>
-      <form>
-        <TextInput label='Nama' />
-        <TextInput label='Nilai' mt={8} />
-        <Button mt={20} display='block' size='sm' ml='auto'>
-          Simpan
-        </Button>
+      <form onSubmit={form.onSubmit(submit)}>
+        <Flex direction='column' gap={8}>
+          <TextInput
+            key={form.key('id')}
+            {...form.getInputProps('id')}
+            className='hidden'
+          />
+          <TextInput
+            label='Nama'
+            key={form.key('nama')}
+            {...form.getInputProps('nama')}
+          />
+          <NumberInput
+            label='Bobot'
+            key={form.key('bobot')}
+            {...form.getInputProps('bobot')}
+          />
+          <NumberInput
+            label='Bobot minimum'
+            key={form.key('minimum')}
+            {...form.getInputProps('minimum')}
+          />
+          <Textarea
+            label='keterangan'
+            key={form.key('keterangan')}
+            {...form.getInputProps('keterangan')}
+          />
+          <Button mt={16} display='block' size='sm' type='submit'>
+            Simpan
+          </Button>
+        </Flex>
       </form>
     </Modal>
   )
 }
 
 export function DeleteModal({ openedDelete, handleClose, id }) {
+  const { mutate } = useDeleteKriteria()
+
+  const submit = () => {
+    mutate(id)
+    handleClose()
+  }
+
   return (
     <Modal opened={openedDelete} onClose={handleClose} title='Hapus Kriteria'>
       <div>
         <p className='text-lg text-center'>Anda yakin ingin hapus data ini?</p>
-        <Button mt={20} display='block' size='sm' ml='auto' color='red'>
+        <Button mt={20} display='block' size='sm' ml='auto' color='red' onClick={submit}>
           Hapus
         </Button>
       </div>
@@ -51,7 +124,12 @@ export function AddModal({ openedAdd, handleClose }) {
   })
 
   const submit = (data) => {
-    mutate(data)
+    const payload = {
+      ...data,
+      bobot: parseFloat(data.bobot),
+      minimum: parseFloat(data.minimum),
+    }
+    mutate(payload)
     handleClose()
   }
 
@@ -64,12 +142,12 @@ export function AddModal({ openedAdd, handleClose }) {
             key={form.key('nama')}
             {...form.getInputProps('nama')}
           />
-          <TextInput
+          <NumberInput
             label='Bobot'
             key={form.key('bobot')}
             {...form.getInputProps('bobot')}
           />
-          <TextInput
+          <NumberInput
             label='Bobot minimum'
             key={form.key('minimum')}
             {...form.getInputProps('minimum')}
