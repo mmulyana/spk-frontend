@@ -13,21 +13,23 @@ const updateKriteria = async (payload) => {
 const deleteKriteria = async (id) => {
   return await http.delete(`${URL.KRITERIA}/${id}`)
 }
-const getKriteria = async (id) => {
-  if (!!id) return await http(`${URL.KRITERIA}/${id}`)
+const getAllKriteria = async () => {
   return await http(URL.KRITERIA)
+}
+const getDetailKriteria = async (id) => {
+  return await http(`${URL.KRITERIA}/${id}`)
 }
 
 export const useKriteria = () => {
   return useQuery({
-    queryFn: getKriteria,
+    queryFn: getAllKriteria,
     queryKey: [KEYS.KRITERIA],
   })
 }
 
 export const useDetailKriteria = (id) => {
   return useQuery({
-    queryFn: () => getKriteria(id),
+    queryFn: () => getDetailKriteria(id),
     queryKey: [KEYS.KRITERIA, id],
     enabled: !!id,
   })
