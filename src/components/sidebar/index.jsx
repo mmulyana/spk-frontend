@@ -1,9 +1,12 @@
 import { Text, Group, Button, Flex } from '@mantine/core'
 
-import { Link, matchPath } from 'react-router-dom'
+import { Link, matchPath, useNavigate } from 'react-router-dom'
 import { PATH } from '../../utils/constant/_path'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
 import Logo from '../logo'
+import { useAtomValue } from 'jotai'
+import { userAtom } from '../../atom/user'
+import { CookieKeys, CookieStorage } from '../../utils/cookie'
 
 const AdminMenus = [{ label: 'Akun', path: PATH.DASHBOARD_ADMIN_ACCOUNT }]
 
@@ -16,6 +19,13 @@ const MainMenu = [
 
 export default function Sidebar() {
   const isActive = (path) => !!matchPath({ path }, window.location.pathname)
+  const navigate = useNavigate()
+  const user = useAtomValue(userAtom)
+
+  const onLogout = () => {
+    CookieStorage.remove(CookieKeys.AuthToken)
+    navigate(PATH.LOGIN)
+  }
 
   const renderMenu = (menus) =>
     menus.map((menu) => (
@@ -47,22 +57,25 @@ export default function Sidebar() {
         </Flex>
         <div className='w-full h-[1.5px] bg-gray-100 absolute bottom-0 left-1/2 -translate-x-1/2'></div>
       </div>
-      <div className='mt-4'>
-        <Group justify='space-between' className='mb-2'>
-          <Text size='xs' fw={500} c='dimmed'>
-            Menus
-          </Text>
-        </Group>
-        <div className='flex flex-col gap-2'>{renderMenu(MainMenu)}</div>
-      </div>
-      <div className='mt-4'>
-        <Group justify='space-between' className='mb-2'>
-          <Text size='xs' fw={500} c='dimmed'>
-            Admin
-          </Text>
-        </Group>
-        <div className='flex flex-col gap-2'>{renderMenu(AdminMenus)}</div>
-      </div>
+      {user?.role === 'MANAGER' ? (
+        <div className='mt-4'>
+          <Group justify='space-between' className='mb-2'>
+            <Text size='xs' fw={500} c='dimmed'>
+              Menus
+            </Text>
+          </Group>
+          <div className='flex flex-col gap-2'>{renderMenu(MainMenu)}</div>
+        </div>
+      ) : (
+        <div className='mt-4'>
+          <Group justify='space-between' className='mb-2'>
+            <Text size='xs' fw={500} c='dimmed'>
+              Admin
+            </Text>
+          </Group>
+          <div className='flex flex-col gap-2'>{renderMenu(AdminMenus)}</div>
+        </div>
+      )}
 
       <div className='px-4 absolute bottom-4 left-1/2 -translate-x-1/2 h-fit w-full'>
         <Button
@@ -70,6 +83,7 @@ export default function Sidebar() {
           unstyled
           className='text-gray-500 rounded-md text-sm hover:bg-[#F6F7F9] hover:text-gray-600'
           py={8}
+          onClick={onLogout}
         >
           <Flex align='center' justify='center' gap={4}>
             <ArrowRightStartOnRectangleIcon className='h-5 w-5 text-gray-400' />
