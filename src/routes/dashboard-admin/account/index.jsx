@@ -1,22 +1,16 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/16/solid'
-import {
-  Button,
-  Flex,
-  Modal,
-  Pagination,
-  Select,
-  Table,
-  TextInput,
-} from '@mantine/core'
+import { Button, Flex, Pagination, Table } from '@mantine/core'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTitle } from '../../../utils/useTitle'
-import { accounts } from '../../../data/table'
+import { useAkun } from '../../../utils/use-akun'
+import { AddModal, DeleteModal, EditModal } from './modal'
 import DashboardAdminLayout from '../layout'
 
 export default function Page() {
   useTitle('Akun')
   const [id, setId] = useState(null)
+  const { data: dataAkun, isLoading } = useAkun()
 
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false)
@@ -24,7 +18,10 @@ export default function Page() {
     useDisclosure(false)
   const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false)
 
-  const data = useMemo(() => accounts, [])
+  const data = useMemo(() => {
+    if (isLoading) return []
+    return dataAkun?.data?.data
+  }, [dataAkun, isLoading])
 
   const handleClose = () => {
     if (id !== null) setId(null)
@@ -38,9 +35,11 @@ export default function Page() {
 
   const rows = data.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
-      <Table.Td>{d.name}</Table.Td>
+      <Table.Td>{d.nama}</Table.Td>
       <Table.Td>{d.email}</Table.Td>
-      <Table.Td>{d.role}</Table.Td>
+      <Table.Td>
+        {d?.role.at(0).toUpperCase() + d?.role.slice(1).toLowerCase()}
+      </Table.Td>
       <Table.Td className='flex justify-between'>
         <Button
           variant='transparent'
@@ -109,46 +108,13 @@ export default function Page() {
         </div>
       </DashboardAdminLayout>
 
-      <Modal opened={openedEdit} onClose={handleClose} title='Edit Akun'>
-        <form className='flex flex-col gap-4'>
-          <TextInput label='Nama' />
-          <TextInput label='Email' />
-          <Select
-            label='Jabatan'
-            placeholder='select'
-            data={['Admin', 'Manager']}
-          />
-          <Button mt={20} display='block' size='sm' ml='auto'>
-            Simpan
-          </Button>
-        </form>
-      </Modal>
-
-      <Modal opened={openedDelete} onClose={handleClose} title='Hapus Akun'>
-        <div>
-          <p className='text-lg text-center'>
-            Anda yakin ingin hapus data ini?
-          </p>
-          <Button mt={20} display='block' size='sm' ml='auto' color='red'>
-            Hapus
-          </Button>
-        </div>
-      </Modal>
-
-      <Modal opened={openedAdd} onClose={handleClose} title='Tambah Akun'>
-        <form className='flex flex-col gap-4'>
-          <TextInput label='Nama' />
-          <TextInput label='Email' />
-          <Select
-            label='Jabatan'
-            placeholder='select'
-            data={['Admin', 'Manager']}
-          />
-          <Button mt={20} display='block' size='sm' ml='auto'>
-            Tambah
-          </Button>
-        </form>
-      </Modal>
+      <AddModal openedAdd={openedAdd} handleClose={handleClose} />
+      <EditModal openedEdit={openedEdit} handleClose={handleClose} id={id} />
+      <DeleteModal
+        openedDelete={openedDelete}
+        handleClose={handleClose}
+        id={id}
+      />
     </>
   )
 }
