@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { URL } from './constant/_urls'
 import http from './http'
+import { KEYS } from './constant/_key'
+import { toast } from 'sonner'
 
 const createAkun = async (payload) => {
   return await http.post(URL.AKUN, payload)
@@ -12,13 +14,15 @@ const deleteAkun = async (id) => {
   return await http.delete(`${URL.AKUN}/${id}`)
 }
 const getAkun = async (id) => {
-  if (!!id) return await http(`${URL.AKUN}/${id}`)
+  return await http(`${URL.AKUN}/${id}`)
+}
+const getAllAkun = async () => {
   return await http(URL.AKUN)
 }
 
 export const useAkun = () => {
   return useQuery({
-    queryFn: getAkun,
+    queryFn: getAllAkun,
     queryKey: [KEYS.AKUN],
   })
 }
@@ -37,7 +41,7 @@ export const useCreateAkun = () => {
   const { mutate } = useMutation({
     mutationFn: createAkun,
     onError: (error) => {
-      toast.error('Gagal menambah akun, silahkan ulangi')
+      toast.error(error.response.data.message || 'Gagal menambah akun, silahkan ulangi')
     },
     onSuccess: (data) => {
       toast.success('Akun berhasil ditambahkan')
@@ -54,7 +58,7 @@ export const useUpdateAkun = (id) => {
   const { mutate } = useMutation({
     mutationFn: updateAkun,
     onError: (error) => {
-      toast.error('Gagal mengupdate akun, silahkan ulangi')
+      toast.error(error.response.data.message || 'Gagal mengupdate akun, silahkan ulangi')
     },
     onSuccess: (data) => {
       toast.success('Akun berhasil diupdate')
