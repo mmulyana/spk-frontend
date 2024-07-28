@@ -7,12 +7,20 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../utils/use-auth'
 import useUrlState from '@ahooksjs/use-url-state'
+import { useAtom } from 'jotai'
+import { userAtom } from '../../../atom/user'
+import { useEffect } from 'react'
+import { CookieKeys, CookieStorage } from '../../../utils/cookie'
+import { jwtDecode } from 'jwt-decode'
+import { PATH } from '../../../utils/constant/_path'
 
 export default function Register() {
   const { register } = useAuth()
+  const navigate = useNavigate()
+  const [user, setUser] = useAtom(userAtom)
   const [url, setUrl] = useUrlState({ role: '' })
 
   const form = useForm({
@@ -36,6 +44,21 @@ export default function Register() {
   const submit = (data) => {
     register({ ...data, role: url.role || 'MANAGER' })
   }
+
+  useEffect(() => {
+    if (user !== null) return
+
+    const token = CookieStorage.get(CookieKeys.AuthToken)
+    if (token) {
+      const decoded = jwtDecode(token)
+      setUser({ nama: decoded.nama, email: decoded.email, role: decoded.role })
+      if (decoded?.role === 'MANAGER') {
+        navigate(PATH.DASHBOARD)
+      } else {
+        navigate(PATH.DASHBOARD_ADMIN_ACCOUNT)
+      }
+    }
+  }, [user])
 
   return (
     <>
