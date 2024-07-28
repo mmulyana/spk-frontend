@@ -61,7 +61,7 @@ export default function Page() {
 
   const modalOpenConfig = {
     add: {
-      component: <CreateModal setModalState={setModalState} />,
+      component: <CreateModal setModalState={setModalState} setId={setId} />,
       title: 'Tambah Pegawai',
       size: 'xl',
     },
@@ -72,7 +72,11 @@ export default function Page() {
     },
     mark: {
       component: (
-        <ApplySpkModal closeAdd={closeAdd} setModalState={setModalState} />
+        <ApplySpkModal
+          closeAdd={closeAdd}
+          setModalState={setModalState}
+          id={id}
+        />
       ),
       title: 'Buat Penilaian Pegawai',
       size: 'lg',
