@@ -9,15 +9,17 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   useCreatePegawai,
   useDeletePegawai,
   useDetailPegawai,
   useUpdatePegawai,
 } from '../../../utils/use-pegawai'
+import { useKriteria } from '../../../utils/use-kriteria'
+import { useCreateSPK } from '../../../utils/use-spk'
 
-export function CreateModal({ setModalState }) {
+export function CreateModal({ setModalState, setId }) {
   const { mutate } = useCreatePegawai()
 
   const form = useForm({
@@ -38,8 +40,13 @@ export function CreateModal({ setModalState }) {
   })
 
   const submit = async (data) => {
-    await mutate(data)
-    setModalState('afterAdd')
+    await mutate(data, {
+      onSuccess: (data) => {
+        const response = data.data.data
+        setId(response.id)
+        setModalState('afterAdd')
+      },
+    })
   }
 
   return (
@@ -181,42 +188,42 @@ const marks = [
 
 export function ApplySpkModal({ setModalState, closeAdd, id }) {
   const [value, setValue] = useState({})
+  const { data: dataKriteria, isLoading } = useKriteria()
+  const { mutate } = useCreateSPK()
+
+  const data = useMemo(() => {
+    if (isLoading) return []
+    return dataKriteria?.data?.data
+  }, [dataKriteria, isLoading])
 
   async function submit() {
-    console.log(value)
+    const payload = {
+      kriteria: { ...value },
+      id,
+    }
+    await mutate(payload)
+    closeAdd()
   }
 
   return (
     <div>
       <Flex direction='column' gap={20} mb={56}>
-        <div>
-          <Text mt='md'>Kriteria 1</Text>
-          <Slider
-            defaultValue={1}
-            label={(val) => marks.find((mark) => mark.value === val).label}
-            step={1}
-            marks={marks}
-            onChangeEnd={(val) => {
-              setValue((prev) => ({ ...prev, kriteria_1: val }))
-            }}
-            max={5}
-            min={1}
-          />
-        </div>
-        <div>
-          <Text mt='md'>Kriteria 2</Text>
-          <Slider
-            defaultValue={1}
-            label={(val) => marks.find((mark) => mark.value === val).label}
-            step={1}
-            marks={marks}
-            onChangeEnd={(val) => {
-              setValue((prev) => ({ ...prev, kriteria_2: val }))
-            }}
-            max={5}
-            min={1}
-          />
-        </div>
+        {data.map((d, index) => (
+          <div key={index}>
+            <Text mt='md'>{d.nama}</Text>
+            <Slider
+              defaultValue={1}
+              label={(val) => marks.find((mark) => mark.value === val).label}
+              step={1}
+              marks={marks}
+              onChangeEnd={(val) => {
+                setValue((prev) => ({ ...prev, [d.id]: val }))
+              }}
+              max={5}
+              min={1}
+            />
+          </div>
+        ))}
       </Flex>
 
       <Flex justify='end'>
@@ -420,11 +427,20 @@ export function ModalDelete({ openedDelete, handleClose, id }) {
 
 export function EditApplySpkModal({ openedDetail, onClose, id }) {
   const [value, setValue] = useState({})
+  const { data: dataKriteria, isLoading } = useKriteria()
+  const { mutate } = useCreateSPK()
+
+  const data = useMemo(() => {
+    if (isLoading) return []
+    return dataKriteria?.data?.data
+  }, [dataKriteria, isLoading])
 
   async function submit() {
-    console.log(value)
-    console.log(id)
-
+    const payload = {
+      kriteria: { ...value },
+      id,
+    }
+    await mutate(payload)
     onClose()
   }
 
@@ -435,34 +451,22 @@ export function EditApplySpkModal({ openedDetail, onClose, id }) {
       onClose={onClose}
     >
       <Flex direction='column' gap={20} mb={56}>
-        <div>
-          <Text mt='md'>Kriteria 1</Text>
-          <Slider
-            defaultValue={1}
-            label={(val) => marks.find((mark) => mark.value === val).label}
-            step={1}
-            marks={marks}
-            onChangeEnd={(val) => {
-              setValue((prev) => ({ ...prev, kriteria_1: val }))
-            }}
-            max={5}
-            min={1}
-          />
-        </div>
-        <div>
-          <Text mt='md'>Kriteria 2</Text>
-          <Slider
-            defaultValue={1}
-            label={(val) => marks.find((mark) => mark.value === val).label}
-            step={1}
-            marks={marks}
-            onChangeEnd={(val) => {
-              setValue((prev) => ({ ...prev, kriteria_2: val }))
-            }}
-            max={5}
-            min={1}
-          />
-        </div>
+        {data.map((d, index) => (
+          <div key={index}>
+            <Text mt='md'>{d.nama}</Text>
+            <Slider
+              defaultValue={1}
+              label={(val) => marks.find((mark) => mark.value === val).label}
+              step={1}
+              marks={marks}
+              onChangeEnd={(val) => {
+                setValue((prev) => ({ ...prev, [d.id]: val }))
+              }}
+              max={5}
+              min={1}
+            />
+          </div>
+        ))}
       </Flex>
 
       <Flex justify='end'>
