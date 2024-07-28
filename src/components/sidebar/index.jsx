@@ -35,8 +35,8 @@ export default function Sidebar() {
         className={[
           'hover:bg-white text-sm py-2.5 px-3 rounded-lg relative',
           isActive(menu.path)
-            ? 'bg-[#F6F7F9] text-gray-600 font-medium hover:bg-gray-100'
-            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50',
+            ? 'bg-[#F6F7F9] text-gray-600 font-medium hover:bg-gray-200/50'
+            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200/20',
         ].join(' ')}
       >
         {isActive(menu.path) && (
