@@ -11,10 +11,18 @@ import {
 import { useForm } from '@mantine/form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../utils/use-auth'
+import { useAtom } from 'jotai'
+import { userAtom } from '../../../atom/user'
+import { useEffect } from 'react'
+import { CookieKeys, CookieStorage } from '../../../utils/cookie'
+import { jwtDecode } from 'jwt-decode'
+import { PATH } from '../../../utils/constant/_path'
 
 export default function Login() {
   const { login } = useAuth()
-  
+  const [user, setUser] = useAtom(userAtom)
+  const navigate = useNavigate()
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -26,6 +34,21 @@ export default function Login() {
   const submit = (data) => {
     login(data)
   }
+
+  useEffect(() => {
+    if (user !== null) return
+
+    const token = CookieStorage.get(CookieKeys.AuthToken)
+    if (token) {
+      const decoded = jwtDecode(token)
+      setUser({ nama: decoded.nama, email: decoded.email, role: decoded.role })
+      if (decoded?.role === 'MANAGER') {
+        navigate(PATH.DASHBOARD)
+      } else {
+        navigate(PATH.DASHBOARD_ADMIN_ACCOUNT)
+      }
+    }
+  }, [user])
 
   return (
     <>
