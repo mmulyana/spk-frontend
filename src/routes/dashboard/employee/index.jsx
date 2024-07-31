@@ -28,6 +28,11 @@ import {
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { usePegawai } from '../../../utils/use-pegawai'
 
+function roundUpToDecimalPlace(num, decimalPlaces) {
+  const factor = Math.pow(10, decimalPlaces)
+  return Math.ceil(num * factor) / factor
+}
+
 export default function Page() {
   useTitle('Pegawai')
 
@@ -90,7 +95,11 @@ export default function Page() {
 
     if (openedEdit) closeEdit()
 
-    if (openedAdd) closeAdd()
+    if (openedAdd) {
+      closeAdd()
+
+      setModalState('add')
+    }
 
     if (openedDetail) closeDetail()
   }
@@ -129,6 +138,11 @@ export default function Page() {
             </Badge>
           </Tooltip>
         )}
+      </Table.Td>
+      <Table.Td>
+        {isNaN(d?.Hasil?.[0]?.nilai)
+          ? null
+          : roundUpToDecimalPlace(d?.Hasil?.[0]?.nilai, 1)}
       </Table.Td>
       <Table.Td className='flex justify-between'>
         <Button
@@ -188,6 +202,9 @@ export default function Page() {
                 </Table.Th>
                 <Table.Th className='bg-[#F6F7F9]'>
                   <span className='text-sm font-medium'>Status</span>
+                </Table.Th>
+                <Table.Th className='bg-[#F6F7F9]'>
+                  <span className='text-sm font-medium'>Nilai</span>
                 </Table.Th>
                 <Table.Th className='w-[120px] bg-[#F6F7F9] rounded-r-md'></Table.Th>
               </Table.Tr>
