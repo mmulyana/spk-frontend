@@ -3,6 +3,7 @@ import {
   Flex,
   Modal,
   NumberInput,
+  Select,
   Textarea,
   TextInput,
 } from '@mantine/core'
@@ -11,7 +12,7 @@ import {
   useCreateKriteria,
   useDetailKriteria,
   useUpdateKriteria,
-  useDeleteKriteria
+  useDeleteKriteria,
 } from '../../../utils/use-kriteria'
 import { useEffect } from 'react'
 
@@ -27,6 +28,7 @@ export function EditModal({ openedEdit, handleClose, id }) {
       bobot: 0,
       minimum: 0,
       keterangan: '',
+      tipe: '',
     },
   })
 
@@ -39,6 +41,7 @@ export function EditModal({ openedEdit, handleClose, id }) {
         minimum: kriteria?.minimum,
         keterangan: kriteria?.keterangan,
         id: kriteria?.id,
+        tipe: kriteria?.tipe,
       })
     }
   }, [isLoading, data])
@@ -76,6 +79,13 @@ export function EditModal({ openedEdit, handleClose, id }) {
             label='Bobot minimum'
             key={form.key('minimum')}
             {...form.getInputProps('minimum')}
+            />
+          <Select
+            label='Tipe'
+            placeholder='Pilih tipe'
+            data={['Benefit', 'Cost']}
+            key={form.key('tipe')}
+            {...form.getInputProps('tipe')}
           />
           <Textarea
             label='keterangan'
@@ -103,7 +113,14 @@ export function DeleteModal({ openedDelete, handleClose, id }) {
     <Modal opened={openedDelete} onClose={handleClose} title='Hapus Kriteria'>
       <div>
         <p className='text-lg text-center'>Anda yakin ingin hapus data ini?</p>
-        <Button mt={20} display='block' size='sm' ml='auto' color='red' onClick={submit}>
+        <Button
+          mt={20}
+          display='block'
+          size='sm'
+          ml='auto'
+          color='red'
+          onClick={submit}
+        >
           Hapus
         </Button>
       </div>
@@ -120,6 +137,7 @@ export function AddModal({ openedAdd, handleClose }) {
       bobot: 0,
       minimum: 0,
       keterangan: '',
+      tipe: '',
     },
   })
 
@@ -129,8 +147,12 @@ export function AddModal({ openedAdd, handleClose }) {
       bobot: parseFloat(data.bobot),
       minimum: parseFloat(data.minimum),
     }
-    mutate(payload)
-    handleClose()
+    mutate(payload, {
+      onSuccess: () => {
+        handleClose()
+        form.reset()
+      },
+    })
   }
 
   return (
@@ -151,6 +173,13 @@ export function AddModal({ openedAdd, handleClose }) {
             label='Bobot minimum'
             key={form.key('minimum')}
             {...form.getInputProps('minimum')}
+          />
+          <Select
+            label='Tipe'
+            placeholder='Pilih tipe'
+            data={['Benefit', 'Cost']}
+            key={form.key('tipe')}
+            {...form.getInputProps('tipe')}
           />
           <Textarea
             label='keterangan'
