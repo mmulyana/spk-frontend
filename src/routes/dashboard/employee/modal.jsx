@@ -2,6 +2,7 @@ import {
   Button,
   Flex,
   Modal,
+  NumberInput,
   Select,
   Slider,
   Text,
@@ -187,7 +188,6 @@ const marks = [
 ]
 
 export function ApplySpkModal({ setModalState, closeAdd, id }) {
-  const [value, setValue] = useState({})
   const { data: dataKriteria, isLoading } = useKriteria()
   const { mutate } = useCreateSPK()
 
@@ -196,50 +196,53 @@ export function ApplySpkModal({ setModalState, closeAdd, id }) {
     return dataKriteria?.data?.data
   }, [dataKriteria, isLoading])
 
-  async function submit() {
+  const form = useForm({
+    mode: 'uncontrolled',
+  })
+
+  async function submit(values) {
+    const dataValues = Object.entries(values).map(([key, value]) => {
+      const index = data.findIndex((d) => d.id == key.split('-')[1])
+      return {
+        id: Number(key.split('-')[1]),
+        nilai: value,
+        tipe: data[index].tipe,
+      }
+    })
+
     const payload = {
-      kriteria: { ...value },
       id,
+      values: dataValues,
     }
-    await mutate(payload)
-    closeAdd()
+    mutate(payload, {
+      onSuccess: () => {
+        form.reset()
+        closeAdd()
+      },
+    })
+    onClose()
   }
 
   return (
-    <div>
-      <Flex direction='column' gap={20} mb={56}>
+    <form onSubmit={form.onSubmit(submit)}>
+      <Flex direction='column' gap={20}>
         {data.map((d, index) => (
           <div key={index}>
-            <Text mt='md'>{d.nama}</Text>
-            <Slider
-              defaultValue={1}
-              label={(val) => marks.find((mark) => mark.value === val).label}
-              step={1}
-              marks={marks}
-              onChangeEnd={(val) => {
-                setValue((prev) => ({ ...prev, [d.id]: val }))
-              }}
-              max={5}
-              min={1}
+            <NumberInput
+              label={d.nama}
+              min={d.minimum}
+              name={d.nama + '-' + d.id}
+              key={d.nama.split(' ').join('_') + '-' + d.id}
+              {...form.getInputProps(d.nama.split(' ').join('_') + '-' + d.id)}
             />
           </div>
         ))}
       </Flex>
 
-      <Flex justify='end'>
-        <Button
-          onClick={() => {
-            submit()
-            setTimeout(() => {
-              closeAdd()
-              setModalState('add')
-            }, 1000)
-          }}
-        >
-          Buat
-        </Button>
+      <Flex justify='end' mt={24}>
+        <Button type='submit'>Buat</Button>
       </Flex>
-    </div>
+    </form>
   )
 }
 
@@ -426,7 +429,6 @@ export function ModalDelete({ openedDelete, handleClose, id }) {
 }
 
 export function EditApplySpkModal({ openedDetail, onClose, id }) {
-  const [value, setValue] = useState({})
   const { data: dataKriteria, isLoading } = useKriteria()
   const { mutate } = useCreateSPK()
 
@@ -435,12 +437,29 @@ export function EditApplySpkModal({ openedDetail, onClose, id }) {
     return dataKriteria?.data?.data
   }, [dataKriteria, isLoading])
 
-  async function submit() {
+  const form = useForm({
+    mode: 'uncontrolled',
+  })
+
+  async function submit(values) {
+    const dataValues = Object.entries(values).map(([key, value]) => {
+      const index = data.findIndex((d) => d.id == key.split('-')[1])
+      return {
+        id: Number(key.split('-')[1]),
+        nilai: value,
+        tipe: data[index].tipe,
+      }
+    })
+
     const payload = {
-      kriteria: { ...value },
       id,
+      values: dataValues,
     }
-    await mutate(payload)
+    mutate(payload, {
+      onSuccess: () => {
+        form.reset()
+      },
+    })
     onClose()
   }
 
@@ -450,28 +469,27 @@ export function EditApplySpkModal({ openedDetail, onClose, id }) {
       title='Buat Penilaian Pegawai'
       onClose={onClose}
     >
-      <Flex direction='column' gap={20} mb={56}>
-        {data.map((d, index) => (
-          <div key={index}>
-            <Text mt='md'>{d.nama}</Text>
-            <Slider
-              defaultValue={1}
-              label={(val) => marks.find((mark) => mark.value === val).label}
-              step={1}
-              marks={marks}
-              onChangeEnd={(val) => {
-                setValue((prev) => ({ ...prev, [d.id]: val }))
-              }}
-              max={5}
-              min={1}
-            />
-          </div>
-        ))}
-      </Flex>
+      <form onSubmit={form.onSubmit(submit)}>
+        <Flex direction='column' gap={20}>
+          {data.map((d, index) => (
+            <div key={index}>
+              <NumberInput
+                label={d.nama}
+                min={d.minimum}
+                name={d.nama + '-' + d.id}
+                key={d.nama.split(' ').join('_') + '-' + d.id}
+                {...form.getInputProps(
+                  d.nama.split(' ').join('_') + '-' + d.id
+                )}
+              />
+            </div>
+          ))}
+        </Flex>
 
-      <Flex justify='end'>
-        <Button onClick={submit}>Buat</Button>
-      </Flex>
+        <Flex justify='end' mt={24}>
+          <Button type='submit'>Buat</Button>
+        </Flex>
+      </form>
     </Modal>
   )
 }
