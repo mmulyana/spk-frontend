@@ -19,6 +19,11 @@ import {
 import { useKriteria } from '../../../utils/use-kriteria'
 import { useCreateSPK } from '../../../utils/use-spk'
 import { departement, education, role, status } from '../../../data/common'
+import { toast } from 'sonner'
+
+function hasZero(data) {
+  return Object.values(data).some((value) => value === 0)
+}
 
 export function CreateModal({ setModalState, setId }) {
   const { mutate } = useCreatePegawai()
@@ -169,7 +174,7 @@ export function SuccessCreateModal({ setModalState }) {
   )
 }
 
-export function ApplySpkModal({ setModalState, closeAdd, id }) {
+export function ApplySpkModal({ closeAdd, id }) {
   const { data: dataKriteria, isLoading } = useKriteria()
   const { mutate } = useCreateSPK()
 
@@ -183,6 +188,12 @@ export function ApplySpkModal({ setModalState, closeAdd, id }) {
   })
 
   async function submit(values) {
+    const isHasZero = hasZero(values)
+    if (isHasZero) {
+      toast.error('Silahkan isi kembali dan pastikan bukan nol')
+      return
+    }
+
     const dataValues = Object.entries(values).map(([key, value]) => {
       const index = data.findIndex((d) => d.id == key.split('-')[1])
       return {
@@ -214,6 +225,8 @@ export function ApplySpkModal({ setModalState, closeAdd, id }) {
               label={d.nama}
               min={d.minimum}
               name={d.nama + '-' + d.id}
+              minimum={1}
+              defaultValue={1}
               key={d.nama.split(' ').join('_') + '-' + d.id}
               {...form.getInputProps(d.nama.split(' ').join('_') + '-' + d.id)}
             />
@@ -428,6 +441,12 @@ export function EditApplySpkModal({ openedDetail, onClose, id }) {
   })
 
   async function submit(values) {
+    const isHasZero = hasZero(values)
+    if (isHasZero) {
+      toast.error('Silahkan isi kembali dan pastikan bukan nol')
+      return
+    }
+    
     const dataValues = Object.entries(values).map(([key, value]) => {
       const index = data.findIndex((d) => d.id == key.split('-')[1])
       return {
@@ -463,6 +482,8 @@ export function EditApplySpkModal({ openedDetail, onClose, id }) {
                 label={d.nama}
                 min={d.minimum}
                 name={d.nama + '-' + d.id}
+                minimum={1}
+                defaultValue={1}
                 key={d.nama.split(' ').join('_') + '-' + d.id}
                 {...form.getInputProps(
                   d.nama.split(' ').join('_') + '-' + d.id
