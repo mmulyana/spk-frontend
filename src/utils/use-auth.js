@@ -32,7 +32,11 @@ export const useAuth = () => {
       setUser({ nama: decoded.nama, email: decoded.email, role: decoded.role })
       CookieStorage.set(CookieKeys.AuthToken, token)
 
-      navigate(PATH.DASHBOARD)
+      if (decoded?.role === 'MANAGER') {
+        navigate(PATH.DASHBOARD)
+      } else {
+        navigate(PATH.DASHBOARD_ADMIN_ACCOUNT)
+      }
       toast.success('Login berhasil')
     },
   })
