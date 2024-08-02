@@ -37,15 +37,22 @@ export function EditModal({ openedEdit, handleClose, id }) {
         id: akun?.id,
         nama: akun?.nama,
         email: akun?.email,
-        role: akun?.role.at(0).toUpperCase() + akun?.role.slice(1).toLowerCase(),
+        role:
+          akun?.role.at(0).toUpperCase() + akun?.role.slice(1).toLowerCase(),
       })
     }
   }, [isLoading, data])
 
   const submit = (data) => {
-    mutate({ ...data, role: data.role.toUpperCase() })
-    handleClose()
-    form.reset()
+    mutate(
+      { ...data, role: data.role.toUpperCase() },
+      {
+        onSuccess: () => {
+          handleClose()
+          form.reset()
+        },
+      }
+    )
   }
 
   return (
@@ -68,7 +75,7 @@ export function EditModal({ openedEdit, handleClose, id }) {
             {...form.getInputProps('email')}
           />
           <Select
-            label='Jabatan'
+            label='Role'
             placeholder='select'
             data={['Admin', 'Manager']}
             key={form.key('role')}
@@ -129,11 +136,18 @@ export function AddModal({ openedAdd, handleClose }) {
   })
 
   const submit = async (data) => {
-    await mutate({
-      ...data,
-      role: data.role ? data.role.toUpperCase() : 'MANAGER',
-    })
-    handleClose()
+    await mutate(
+      {
+        ...data,
+        role: data.role ? data.role.toUpperCase() : 'MANAGER',
+      },
+      {
+        onSuccess: () => {
+          form.reset()
+          handleClose()
+        },
+      }
+    )
   }
 
   return (
@@ -151,7 +165,7 @@ export function AddModal({ openedAdd, handleClose }) {
             {...form.getInputProps('email')}
           />
           <Select
-            label='Jabatan'
+            label='Role'
             placeholder='select'
             data={['Admin', 'Manager']}
             key={form.key('role')}
