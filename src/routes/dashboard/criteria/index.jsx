@@ -102,10 +102,6 @@ export default function Page() {
             </Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
-
-          <Flex justify='end' mt={16}>
-            <Pagination total={10} size='sm' radius='xs' value={1} />
-          </Flex>
         </div>
       </DashboardLayout>
 
