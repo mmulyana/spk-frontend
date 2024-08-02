@@ -8,4 +8,5 @@ export const URL = {
   DASHBOARD: BASE_URL + '/dashboard',
   AKUN: BASE_URL + '/akun',
   SPK: BASE_URL + '/spk',
+  PERINGKAT: BASE_URL + '/peringkat',
 }
