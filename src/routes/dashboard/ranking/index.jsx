@@ -48,6 +48,7 @@ export default function Page() {
     sort: 'desc',
     jabatan: '',
     nama: '',
+    page: ''
   })
 
   const { data: dataRangking, isLoading } = usePeringkat({
@@ -57,6 +58,7 @@ export default function Page() {
       : undefined),
     ...(url.nama !== '' ? { nama: url.nama } : undefined),
     ...(url.jabatan !== '' ? { jabatan: url.jabatan } : undefined),
+    ...(url.page ? { page: url.page } : undefined),
   })
 
   const data = useMemo(() => {
@@ -79,7 +81,7 @@ export default function Page() {
     }
   }, [debouncedSearch])
 
-  const rows = data.map((d, index) => (
+  const rows = data?.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
       <Table.Td>{d.pegawai.nama}</Table.Td>
       <Table.Td>{d.pegawai.NIP}</Table.Td>
@@ -236,7 +238,13 @@ export default function Page() {
           </Table>
 
           <Flex justify='end' mt={16}>
-            <Pagination total={10} size='sm' radius='xs' value={1} />
+            <Pagination
+              total={dataRangking?.data.pagination.totalPages || 10}
+              size='sm'
+              radius='xs'
+              value={dataRangking?.data.pagination.currentPage}
+              onChange={(e) => setUrl({ ...url, page: e })}
+            />
           </Flex>
         </div>
       </DashboardLayout>
