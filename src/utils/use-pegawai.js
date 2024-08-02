@@ -13,17 +13,18 @@ const updatePegawai = async (payload) => {
 const deletePegawai = async (id) => {
   return await http.delete(`${URL.PEGAWAI}/${id}`)
 }
-const getPegawai = async () => {
-  return await http(URL.PEGAWAI)
+const getPegawai = async (params) => {
+  const query = new URLSearchParams(params).toString()
+  return await http(`${URL.PEGAWAI}?${query}`)
 }
 const getDetailPegawai = async (id) => {
   return await http(`${URL.PEGAWAI}/${id}`)
 }
 
-export const usePegawai = () => {
+export const usePegawai = (params) => {
   return useQuery({
-    queryFn: getPegawai,
-    queryKey: [KEYS.PEGAWAI],
+    queryFn: () => getPegawai(params),
+    queryKey: [KEYS.PEGAWAI, { ...params }],
   })
 }
 
