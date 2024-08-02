@@ -26,7 +26,6 @@ export function EditModal({ openedEdit, handleClose, id }) {
       id: '',
       nama: '',
       bobot: 0,
-      minimum: 0,
       keterangan: '',
       tipe: '',
     },
@@ -38,7 +37,6 @@ export function EditModal({ openedEdit, handleClose, id }) {
       form.setValues({
         bobot: kriteria?.bobot,
         nama: kriteria?.nama,
-        minimum: kriteria?.minimum,
         keterangan: kriteria?.keterangan,
         id: kriteria?.id,
         tipe: kriteria?.tipe,
@@ -50,7 +48,6 @@ export function EditModal({ openedEdit, handleClose, id }) {
     const payload = {
       ...data,
       bobot: parseFloat(data.bobot),
-      minimum: parseFloat(data.minimum),
     }
     mutate(payload)
     handleClose()
@@ -75,11 +72,6 @@ export function EditModal({ openedEdit, handleClose, id }) {
             key={form.key('bobot')}
             {...form.getInputProps('bobot')}
           />
-          <NumberInput
-            label='Bobot minimum'
-            key={form.key('minimum')}
-            {...form.getInputProps('minimum')}
-            />
           <Select
             label='Tipe'
             placeholder='Pilih tipe'
@@ -135,7 +127,6 @@ export function AddModal({ openedAdd, handleClose }) {
     initialValues: {
       nama: '',
       bobot: 0,
-      minimum: 0,
       keterangan: '',
       tipe: '',
     },
@@ -145,7 +136,6 @@ export function AddModal({ openedAdd, handleClose }) {
     const payload = {
       ...data,
       bobot: parseFloat(data.bobot),
-      minimum: parseFloat(data.minimum),
     }
     mutate(payload, {
       onSuccess: () => {
@@ -168,11 +158,6 @@ export function AddModal({ openedAdd, handleClose }) {
             label='Bobot'
             key={form.key('bobot')}
             {...form.getInputProps('bobot')}
-          />
-          <NumberInput
-            label='Bobot minimum'
-            key={form.key('minimum')}
-            {...form.getInputProps('minimum')}
           />
           <Select
             label='Tipe'
