@@ -3,4 +3,5 @@ export const KEYS = {
   DASHBOARD: 'dashboard',
   PEGAWAI: 'pegawai',
   AKUN: 'akun',
+  PERINGKAT: 'peringkat',
 }
