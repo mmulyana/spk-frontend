@@ -2,10 +2,7 @@ import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/16/solid'
 import {
   Button,
   Flex,
-  Modal,
-  Pagination,
   Table,
-  TextInput,
 } from '@mantine/core'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
@@ -44,6 +41,7 @@ export default function Page() {
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
       <Table.Td>{d.nama}</Table.Td>
       <Table.Td>{d.bobot}</Table.Td>
+      <Table.Td>{d.keterangan}</Table.Td>
       <Table.Td className='flex justify-between'>
         <Button
           variant='transparent'
@@ -96,6 +94,9 @@ export default function Page() {
                 </Table.Th>
                 <Table.Th className='bg-[#F6F7F9]'>
                   <span className='text-sm font-medium'>Bobot</span>
+                </Table.Th>
+                <Table.Th className='bg-[#F6F7F9]'>
+                  <span className='text-sm font-medium'>Keterangan</span>
                 </Table.Th>
                 <Table.Th className='w-[120px] bg-[#F6F7F9] rounded-r-md'></Table.Th>
               </Table.Tr>
