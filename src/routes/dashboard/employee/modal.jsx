@@ -4,7 +4,6 @@ import {
   Modal,
   NumberInput,
   Select,
-  Slider,
   Text,
   Textarea,
   TextInput,
@@ -19,6 +18,7 @@ import {
 } from '../../../utils/use-pegawai'
 import { useKriteria } from '../../../utils/use-kriteria'
 import { useCreateSPK } from '../../../utils/use-spk'
+import { departement, education, role, status } from '../../../data/common'
 
 export function CreateModal({ setModalState, setId }) {
   const { mutate } = useCreatePegawai()
@@ -108,17 +108,7 @@ export function CreateModal({ setModalState, setId }) {
           w='50%'
           label='Pendidikan Terakhir'
           placeholder='Pilih Pendidikan Terakhir'
-          data={[
-            'SMP',
-            'SMA',
-            'D1',
-            'D2',
-            'D3',
-            'D4',
-            'S1',
-            'S2',
-            'S3',
-          ].reverse()}
+          data={education}
           key={form.key('pendidikan_terakhir')}
           {...form.getInputProps('pendidikan_terakhir')}
         />
@@ -126,7 +116,7 @@ export function CreateModal({ setModalState, setId }) {
           w='50%'
           label='Status Pegawai'
           placeholder='Pilih Status Pegawai'
-          data={['Tetap', 'Kontrak']}
+          data={status}
           key={form.key('status_pegawai')}
           {...form.getInputProps('status_pegawai')}
         />
@@ -136,7 +126,7 @@ export function CreateModal({ setModalState, setId }) {
           w='50%'
           label='Departemen'
           placeholder='Pilih Departemen'
-          data={['Produksi', 'Keuangan', 'Marketing', 'Sales']}
+          data={departement}
           key={form.key('departemen')}
           {...form.getInputProps('departemen')}
         />
@@ -144,7 +134,7 @@ export function CreateModal({ setModalState, setId }) {
           w='50%'
           label='Jabatan'
           placeholder='Pilih Jabatan'
-          data={['Intern', 'Pegawai', 'Supervisor']}
+          data={role}
           key={form.key('jabatan')}
           {...form.getInputProps('jabatan')}
         />
@@ -178,14 +168,6 @@ export function SuccessCreateModal({ setModalState }) {
     </div>
   )
 }
-
-const marks = [
-  { value: 1, label: '1' },
-  { value: 2, label: '2' },
-  { value: 3, label: '3' },
-  { value: 4, label: '4' },
-  { value: 5, label: '5' },
-]
 
 export function ApplySpkModal({ setModalState, closeAdd, id }) {
   const { data: dataKriteria, isLoading } = useKriteria()
@@ -289,7 +271,11 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
   }, [isLoading])
 
   const submit = async (data) => {
-    await mutate(data)
+    await mutate(data, {
+      onSuccess: () => {
+        form.reset()
+      },
+    })
     handleClose()
   }
 
@@ -362,7 +348,7 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
             w='50%'
             label='Pendidikan Terakhir'
             placeholder='Pilih Pendidikan Terakhir'
-            data={['SMP', 'SMA', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3']}
+            data={education}
             key={form.key('pendidikan_terakhir')}
             {...form.getInputProps('pendidikan_terakhir')}
           />
@@ -370,7 +356,7 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
             w='50%'
             label='Status Pegawai'
             placeholder='Pilih Status Pegawai'
-            data={['Tetap', 'Kontrak']}
+            data={status}
             key={form.key('status_pegawai')}
             {...form.getInputProps('status_pegawai')}
           />
@@ -380,7 +366,7 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
             w='50%'
             label='Departemen'
             placeholder='Pilih Departemen'
-            data={['Produksi', 'Keuangan', 'Marketing', 'Sales']}
+            data={departement}
             key={form.key('departemen')}
             {...form.getInputProps('departemen')}
           />
@@ -388,7 +374,7 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
             w='50%'
             label='Jabatan'
             placeholder='Pilih Jabatan'
-            data={['Intern', 'Pegawai', 'Supervisor']}
+            data={role}
             key={form.key('jabatan')}
             {...form.getInputProps('jabatan')}
           />
