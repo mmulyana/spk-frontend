@@ -16,6 +16,7 @@
     "@mantine/form": "^7.10.2",
     "@mantine/hooks": "^7.10.2",
     "@tabler/icons-react": "^3.7.0",
+    "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.2",
     "jotai": "^2.8.4",
     "jwt-decode": "^4.0.0",
