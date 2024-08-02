@@ -27,16 +27,16 @@ import {
 } from './modal'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { usePegawai } from '../../../utils/use-pegawai'
-
-function roundUpToDecimalPlace(num, decimalPlaces) {
-  const factor = Math.pow(10, decimalPlaces)
-  return Math.ceil(num * factor) / factor
-}
+import { roundUpToDecimalPlace } from '../../../utils/decimal'
+import useUrlState from '@ahooksjs/use-url-state'
 
 export default function Page() {
   useTitle('Pegawai')
+  const [url, setUrl] = useUrlState({ page: 1 })
 
-  const { data: dataPegawai, isLoading } = usePegawai()
+  const { data: dataPegawai, isLoading } = usePegawai({
+    ...(url.page ? { page: url.page } : undefined),
+  })
 
   const [id, setId] = useState(null)
   const [modalState, setModalState] = useState('add')
@@ -106,7 +106,6 @@ export default function Page() {
 
   const rows = data?.map((d, index) => (
     <Table.Tr key={index} className='hover:bg-gray-50/50'>
-      <Table.Td>{d.id}</Table.Td>
       <Table.Td>{d.nama}</Table.Td>
       <Table.Td>{d.jabatan}</Table.Td>
       <Table.Td>
@@ -140,9 +139,9 @@ export default function Page() {
         )}
       </Table.Td>
       <Table.Td>
-        {isNaN(d?.Hasil?.[0]?.nilai)
+        {isNaN(d?.hasil?.[0]?.nilai)
           ? null
-          : roundUpToDecimalPlace(d?.Hasil?.[0]?.nilai, 1)}
+          : roundUpToDecimalPlace(d?.hasil?.[0]?.nilai, 1)}
       </Table.Td>
       <Table.Td className='flex justify-between'>
         <Button
@@ -191,9 +190,6 @@ export default function Page() {
           <Table className='rounded-md'>
             <Table.Thead>
               <Table.Tr className='!border-none'>
-                <Table.Th className='rounded-l-md bg-[#F6F7F9]'>
-                  <span className='text-sm font-medium'>Id</span>
-                </Table.Th>
                 <Table.Th className='bg-[#F6F7F9]'>
                   <span className='text-sm font-medium'>Nama</span>
                 </Table.Th>
@@ -213,7 +209,13 @@ export default function Page() {
           </Table>
 
           <Flex justify='end' mt={16}>
-            <Pagination total={10} size='sm' radius='xs' value={1} />
+            <Pagination
+              total={dataPegawai?.data.pagination.totalPages || 10}
+              size='sm'
+              radius='xs'
+              value={dataPegawai?.data.pagination.currentPage}
+              onChange={(e) => setUrl({ page: e })}
+            />
           </Flex>
         </div>
       </DashboardLayout>
