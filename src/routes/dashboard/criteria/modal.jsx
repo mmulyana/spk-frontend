@@ -67,11 +67,17 @@ export function EditModal({ openedEdit, handleClose, id }) {
             key={form.key('nama')}
             {...form.getInputProps('nama')}
           />
-          <NumberInput
-            label='Bobot'
-            key={form.key('bobot')}
-            {...form.getInputProps('bobot')}
-          />
+          <div>
+            <NumberInput
+              label='Bobot'
+              allowDecimal
+              key={form.key('bobot')}
+              {...form.getInputProps('bobot')}
+            />
+            <p className='text-sm text-gray-400'>
+              Masukkan angka desimal. Contoh: 5.67
+            </p>
+          </div>
           <Select
             label='Tipe'
             placeholder='Pilih tipe'
@@ -154,11 +160,17 @@ export function AddModal({ openedAdd, handleClose }) {
             key={form.key('nama')}
             {...form.getInputProps('nama')}
           />
-          <NumberInput
-            label='Bobot'
-            key={form.key('bobot')}
-            {...form.getInputProps('bobot')}
-          />
+          <div>
+            <NumberInput
+              label='Bobot'
+              key={form.key('bobot')}
+              allowDecimal
+              {...form.getInputProps('bobot')}
+            />
+            <p className='text-sm text-gray-400'>
+              Masukkan angka desimal. Contoh: 5.67
+            </p>
+          </div>
           <Select
             label='Tipe'
             placeholder='Pilih tipe'
