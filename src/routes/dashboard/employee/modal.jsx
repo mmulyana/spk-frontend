@@ -4,6 +4,7 @@ import {
   Modal,
   NumberInput,
   Select,
+  Table,
   Text,
   Textarea,
   TextInput,
@@ -241,12 +242,14 @@ export function ApplySpkModal({ closeAdd, id }) {
   )
 }
 
-export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
+export function ModalEdit({ openedEdit, handleClose, id }) {
   const { data, isLoading } = useDetailPegawai(id)
   const { mutate } = useUpdatePegawai()
 
+  const [isResult, setIsResult] = useState(false)
+
   const form = useForm({
-    mode: 'uncontrolled',
+    mode: 'controlled',
     initialValues: {
       id: '',
       nama: '',
@@ -264,7 +267,7 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
   })
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && openedEdit) {
       const user = data?.data?.data
       form.setValues({
         id: user?.id,
@@ -281,16 +284,21 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
         jabatan: user?.jabatan,
       })
     }
-  }, [isLoading])
+  }, [isLoading, openedEdit])
 
   const submit = async (data) => {
-    await mutate(data, {
-      onSuccess: () => {
-        form.reset()
-      },
-    })
+    await mutate(data, {})
     handleClose()
   }
+
+  const perhitungan = useMemo(() => data?.data?.data?.perhitungan || [], [data])
+
+  const rows = perhitungan?.map((item, idx) => (
+    <Table.Tr key={idx}>
+      <Table.Td>{item?.kriteria?.nama}</Table.Td>
+      <Table.Td>{item?.nilai}</Table.Td>
+    </Table.Tr>
+  ))
 
   return (
     <Modal
@@ -299,103 +307,149 @@ export function ModalEdit({ openedEdit, handleClose, setModalState, id }) {
       title='Edit Pegawai'
       size='xl'
     >
-      <form className='w-full' onSubmit={form.onSubmit(submit)}>
-        <Flex gap={16} w='100%'>
-          <TextInput
-            key={form.key('id')}
-            {...form.getInputProps('id')}
-            className='hidden'
+      {isResult ? (
+        <>
+          {!!perhitungan.length ? (
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Nama</Table.Th>
+                  <Table.Th>Nilai</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          ) : (
+            <Flex justify='center'>
+              <Text>Pegawai belum diberi nilai</Text>
+            </Flex>
+          )}
+          <Flex justify='space-between' align='center' w='100%'>
+            <Button
+              mt={20}
+              display='block'
+              size='sm'
+              type='button'
+              variant='subtle'
+              color='dark'
+              onClick={() => setIsResult(false)}
+            >
+              Kembali
+            </Button>
+          </Flex>
+        </>
+      ) : (
+        <form className='w-full' onSubmit={form.onSubmit(submit)}>
+          <Flex gap={16} w='100%'>
+            <TextInput
+              key={form.key('id')}
+              {...form.getInputProps('id')}
+              className='hidden'
+            />
+            <TextInput
+              w='50%'
+              label='Nama'
+              key={form.key('nama')}
+              {...form.getInputProps('nama')}
+            />
+            <TextInput
+              w='50%'
+              label='NIP'
+              key={form.key('NIP')}
+              {...form.getInputProps('NIP')}
+            />
+          </Flex>
+          <Flex gap={16} w='100%' mt={16}>
+            <TextInput
+              w='50%'
+              label='Tempat Lahir'
+              key={form.key('tempat_lahir')}
+              {...form.getInputProps('tempat_lahir')}
+            />
+            <TextInput
+              w='50%'
+              label='Tanggal Lahir'
+              type='date'
+              key={form.key('tanggal_lahir')}
+              {...form.getInputProps('tanggal_lahir')}
+            />
+          </Flex>
+          <Flex gap={16} w='100%' mt={16}>
+            <Select
+              w='50%'
+              label='Jenis Kelamin'
+              placeholder='Pilih Jenis Kelamin'
+              data={['Laki-laki', 'perempuan']}
+              key={form.key('jenis_kelamin')}
+              {...form.getInputProps('jenis_kelamin')}
+            />
+            <TextInput
+              w='50%'
+              label='Agama'
+              key={form.key('agama')}
+              {...form.getInputProps('agama')}
+            />
+          </Flex>
+          <Textarea
+            mt={16}
+            label='Alamat'
+            key={form.key('alamat')}
+            {...form.getInputProps('alamat')}
           />
-          <TextInput
-            w='50%'
-            label='Nama'
-            key={form.key('nama')}
-            {...form.getInputProps('nama')}
-          />
-          <TextInput
-            w='50%'
-            label='NIP'
-            key={form.key('NIP')}
-            {...form.getInputProps('NIP')}
-          />
-        </Flex>
-        <Flex gap={16} w='100%' mt={16}>
-          <TextInput
-            w='50%'
-            label='Tempat Lahir'
-            key={form.key('tempat_lahir')}
-            {...form.getInputProps('tempat_lahir')}
-          />
-          <TextInput
-            w='50%'
-            label='Tanggal Lahir'
-            type='date'
-            key={form.key('tanggal_lahir')}
-            {...form.getInputProps('tanggal_lahir')}
-          />
-        </Flex>
-        <Flex gap={16} w='100%' mt={16}>
-          <Select
-            w='50%'
-            label='Jenis Kelamin'
-            placeholder='Pilih Jenis Kelamin'
-            data={['Laki-laki', 'perempuan']}
-            key={form.key('jenis_kelamin')}
-            {...form.getInputProps('jenis_kelamin')}
-          />
-          <TextInput
-            w='50%'
-            label='Agama'
-            key={form.key('agama')}
-            {...form.getInputProps('agama')}
-          />
-        </Flex>
-        <Textarea
-          mt={16}
-          label='Alamat'
-          key={form.key('alamat')}
-          {...form.getInputProps('alamat')}
-        />
-        <Flex gap={16} w='100%' mt={16}>
-          <Select
-            w='50%'
-            label='Pendidikan Terakhir'
-            placeholder='Pilih Pendidikan Terakhir'
-            data={education}
-            key={form.key('pendidikan_terakhir')}
-            {...form.getInputProps('pendidikan_terakhir')}
-          />
-          <Select
-            w='50%'
-            label='Status Pegawai'
-            placeholder='Pilih Status Pegawai'
-            data={status}
-            key={form.key('status_pegawai')}
-            {...form.getInputProps('status_pegawai')}
-          />
-        </Flex>
-        <Flex gap={16} w='100%' mt={16}>
-          <Select
-            w='50%'
-            label='Departemen'
-            placeholder='Pilih Departemen'
-            data={departement}
-            key={form.key('departemen')}
-            {...form.getInputProps('departemen')}
-          />
-          <Select
-            w='50%'
-            label='Jabatan'
-            placeholder='Pilih Jabatan'
-            data={role}
-            key={form.key('jabatan')}
-            {...form.getInputProps('jabatan')}
-          />
-        </Flex>
-        <Button mt={20} display='block' size='sm' ml='auto' type='submit'>
-          Simpan
-        </Button>
-      </form>
+          <Flex gap={16} w='100%' mt={16}>
+            <Select
+              w='50%'
+              label='Pendidikan Terakhir'
+              placeholder='Pilih Pendidikan Terakhir'
+              data={education}
+              key={form.key('pendidikan_terakhir')}
+              {...form.getInputProps('pendidikan_terakhir')}
+            />
+            <Select
+              w='50%'
+              label='Status Pegawai'
+              placeholder='Pilih Status Pegawai'
+              data={status}
+              key={form.key('status_pegawai')}
+              {...form.getInputProps('status_pegawai')}
+            />
+          </Flex>
+          <Flex gap={16} w='100%' mt={16}>
+            <Select
+              w='50%'
+              label='Departemen'
+              placeholder='Pilih Departemen'
+              data={departement}
+              key={form.key('departemen')}
+              {...form.getInputProps('departemen')}
+            />
+            <Select
+              w='50%'
+              label='Jabatan'
+              placeholder='Pilih Jabatan'
+              data={role}
+              key={form.key('jabatan')}
+              {...form.getInputProps('jabatan')}
+            />
+          </Flex>
+          <Flex justify='space-between' align='center' w='100%'>
+            <Button
+              mt={20}
+              display='block'
+              size='sm'
+              type='button'
+              variant='subtle'
+              color='dark'
+              onClick={() => setIsResult(true)}
+            >
+              Lihat Penilaian
+            </Button>
+            <Button mt={20} display='block' size='sm' type='submit'>
+              Simpan
+            </Button>
+          </Flex>
+        </form>
+      )}
     </Modal>
   )
 }
@@ -446,7 +500,7 @@ export function EditApplySpkModal({ openedDetail, onClose, id }) {
       toast.error('Silahkan isi kembali dan pastikan bukan nol')
       return
     }
-    
+
     const dataValues = Object.entries(values).map(([key, value]) => {
       const index = data.findIndex((d) => d.id == key.split('-')[1])
       return {
